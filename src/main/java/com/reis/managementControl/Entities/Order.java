@@ -41,10 +41,9 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(LocalDate date, BigDecimal totalValue, PaymentMethod paymentMethod) {
+	public Order(LocalDate date, PaymentMethod paymentMethod) {
 		super();
 		this.date = date;
-		this.totalValue = totalValue;
 		this.paymentMethod = paymentMethod;
 	}
 
