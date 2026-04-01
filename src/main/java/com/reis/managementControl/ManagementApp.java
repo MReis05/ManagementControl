@@ -1,5 +1,4 @@
 package com.reis.managementControl;
-
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -24,6 +23,7 @@ public class ManagementApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+    	loader.setControllerFactory(springContext::getBean);
     	BorderPane pane = loader.load();
     	mainScene = new Scene(pane);
     	primaryStage.setScene(mainScene);

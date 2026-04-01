@@ -23,8 +23,8 @@ public class OrderService {
 		return order;
 	}
 	
-	public void save (Order order) {
-		repository.save(order);
+	public Order save (Order order) {
+		return repository.save(order);
 	}
 	
 	public void update(Order order) {

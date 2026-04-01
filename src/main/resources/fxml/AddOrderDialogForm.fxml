@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.AddOrderFormController">
+   <children>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Local da Compra">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Metódo de Pagamento" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label text="Data da Compra" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <ComboBox fx:id="comboBoxLocations" editable="true" prefWidth="150.0" GridPane.columnIndex="1" />
+            <ComboBox fx:id="comboBoxPaymentMethods" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <DatePicker fx:id="dpPurchaseDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </GridPane>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="286.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="322.0" minWidth="10.0" prefWidth="322.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <VBox.margin>
+            <Insets right="40.0" top="30.0" />
+         </VBox.margin>
+         <children>
+            <Label text="Nome do Produto">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Valor Unitário" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Quantidade" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label text="Categoria" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtProductName" promptText="Digite o nome do produto" GridPane.columnIndex="1" />
+            <TextField fx:id="txtUnitValue" promptText="Digite o valor Unitário do produto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtQuantity" promptText="Digite a quantidade de produtos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="comboBoxCategory" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <Button fx:id="btAddProduct" mnemonicParsing="false" onAction="#onBtAddProductAction" text="Adicionar produto">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="10.0" left="450.0" top="20.0" />
+         </VBox.margin>
+      </Button>
+      <TableView fx:id="tableViewOrderItem" prefHeight="191.0" prefWidth="612.0">
+        <columns>
+          <TableColumn fx:id="tableColumnName" prefWidth="130.0" text="Nome" />
+            <TableColumn fx:id="tableColumnCategory" prefWidth="151.0" text="Categoria" />
+            <TableColumn fx:id="tableColumnQuantity" prefWidth="75.0" text="Quantidade" />
+          <TableColumn fx:id="tableColumnUnitValue" prefWidth="104.0" text="V. Unitário" />
+            <TableColumn fx:id="tableColumnTotalValue" prefWidth="104.0" text="V.Total" />
+        </columns>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </TableView>
+      <HBox>
+         <VBox.margin>
+            <Insets left="500.0" top="10.0" />
+         </VBox.margin>
+         <children>
+            <Button fx:id="btSaveOrder" mnemonicParsing="false" onAction="#onBtSaveOrderAction" text="Salvar Compra">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="btCancel" mnemonicParsing="false" text="Cancelar">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

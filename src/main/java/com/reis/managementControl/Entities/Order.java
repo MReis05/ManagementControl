@@ -71,6 +71,18 @@ public class Order implements Serializable {
 		return id;
 	}
 	
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public List<OrderItem> getItems() {
+		return items;
+	}
+
 	public BigDecimal getTotal() {
 		BigDecimal totalValue = BigDecimal.ZERO;
 		

@@ -24,8 +24,8 @@ public class OrderItemService {
 		return orderItem;
 	}
 	
-	public void save (OrderItem orderItem) {
-		repository.save(orderItem);
+	public OrderItem save (OrderItem orderItem) {
+		return repository.save(orderItem);
 	}
 	
 	public void update(OrderItem orderItem) {

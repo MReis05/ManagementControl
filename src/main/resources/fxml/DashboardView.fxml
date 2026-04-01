@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="contentHolder" prefHeight="551.0" prefWidth="619.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="contentHolder" prefHeight="551.0" prefWidth="619.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.DashboardController">
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -46,7 +46,7 @@
       </HBox>
       <HBox prefHeight="36.0" prefWidth="612.0">
          <children>
-            <Button fx:id="btNewOrder" mnemonicParsing="false" text="Adicionar Compra">
+            <Button fx:id="btNewOrder" mnemonicParsing="false" onAction="#onBtNewOrderAction" text="Adicionar Compra">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>

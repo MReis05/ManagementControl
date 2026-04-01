@@ -23,8 +23,8 @@ public class LocationService {
 		return location;
 	}
 	
-	public void save (Location location) {
-		repository.save(location);
+	public Location save (Location location) {
+		return repository.save(location);
 	}
 	
 	public void update(Location location) {

@@ -9,7 +9,7 @@
    <left>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btDashboard" mnemonicParsing="false" onAction="#onBtDashboardAction" text="Tela inicial">
+            <Button fx:id="btDashboard" mnemonicParsing="false" onAction="#onBDashboardAction" text="Tela inicial">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>

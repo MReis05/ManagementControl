@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javafx.fxml.FXML;
@@ -16,6 +18,9 @@ import javafx.scene.layout.VBox;
 @Component
 public class MainViewController implements Initializable {
 
+	@Autowired
+	private ApplicationContext applicationContext;
+	
 	@FXML
 	private VBox contentHolder;
 	
@@ -46,6 +51,7 @@ public class MainViewController implements Initializable {
 	public synchronized <T> void loadView(String absoluteView, Consumer<T> consumer) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteView));
+			loader.setControllerFactory(applicationContext::getBean);
 			VBox vbox = loader.load();
 			
 			contentHolder.getChildren().clear();
