@@ -97,7 +97,7 @@ public class AddOrderFormController implements Initializable {
 	private TableColumn<OrderItem, String> tableColumnCategory;
 	
 	@FXML
-	private TableColumn<OrderItem, Integer> tableColumnQuantity;
+	private TableColumn<OrderItem, BigDecimal> tableColumnQuantity;
 	
 	@FXML
 	private TableColumn<OrderItem, BigDecimal> tableColumnUnitValue;
@@ -140,6 +140,11 @@ public class AddOrderFormController implements Initializable {
 		Utils.currentStage(event).close();
 	}
 	
+	@FXML
+	public void onBtCancelAction(ActionEvent event) {
+		Utils.currentStage(event).close();
+	}
+	
 	private void updateTableView() {
 		obsOrderItem = FXCollections.observableArrayList(orderItemList);
 		tableViewOrderItem.setItems(obsOrderItem);
@@ -151,7 +156,7 @@ public class AddOrderFormController implements Initializable {
 		product.setCategory(comboBoxCategory.getValue());
 		
 		orderItem.setProduct(product);
-		orderItem.setQuantity(Utils.tryParseToInt(txtQuantity.getText()));
+		orderItem.setQuantity(new BigDecimal (txtQuantity.getText()));
 		orderItem.setUnitValue(new BigDecimal(txtUnitValue.getText()));
 		return orderItem;
 	}
@@ -181,7 +186,7 @@ public class AddOrderFormController implements Initializable {
 	
 	private void initializeNodes() {
 		Constraints.setTextFieldDouble(txtUnitValue);
-		Constraints.setTextFieldInteger(txtQuantity);
+		Constraints.setTextFieldDouble(txtQuantity);
 		Constraints.setTextFieldLetters(txtProductName);
 		Constraints.setTextFieldMaxLength(txtProductName, 30);
 		Utils.formatDatePicker(dpPurchaseDate, "dd/MM/yyyy");
@@ -193,6 +198,7 @@ public class AddOrderFormController implements Initializable {
 		tableColumnName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getProduct().getName()));
 		tableColumnCategory.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getProduct().getCategory().name()));
 		tableColumnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+		Utils.formatTableColumnBigDecimal(tableColumnQuantity, 3);
 		tableColumnUnitValue.setCellValueFactory(new PropertyValueFactory<>("unitValue"));
 		Utils.formatTableColumnBigDecimal(tableColumnUnitValue, 2);
 		tableColumnTotalValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalValue()));

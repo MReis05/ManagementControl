@@ -17,13 +17,13 @@ public class OrderItem implements Serializable {
 	@EmbeddedId
 	private OrderItemPK id = new OrderItemPK();
 	
-	private Integer quantity;
+	private BigDecimal quantity;
 	private BigDecimal unitValue;
 	
 	public OrderItem() {
 	}
 
-	public OrderItem(Integer quantity, BigDecimal unitValue, Order order, Product product) {
+	public OrderItem(BigDecimal quantity, BigDecimal unitValue, Order order, Product product) {
 		super();
 		id.setOrder(order);
 		id.setProduct(product);
@@ -47,11 +47,11 @@ public class OrderItem implements Serializable {
 		id.setProduct(product);
 	}
 	
-	public Integer getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
 
@@ -64,6 +64,6 @@ public class OrderItem implements Serializable {
 	}
 
 	public BigDecimal getTotalValue() {
-		return unitValue.multiply(BigDecimal.valueOf(quantity));
+		return unitValue.multiply(quantity);
 	}
 }

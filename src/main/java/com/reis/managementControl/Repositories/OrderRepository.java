@@ -1,9 +1,35 @@
 package com.reis.managementControl.Repositories;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.reis.managementControl.Entities.Order;
+import com.reis.managementControl.Entities.DTO.TotalPerLocationDTO;
+import com.reis.managementControl.Entities.Enums.PaymentMethod;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
+	@Query("SELECT SUM(o.totalValue) FROM Order o WHERE o.date = :date")
+	BigDecimal sumTotalValueByDate(LocalDate date);
+	
+	@Query("SELECT SUM(o.totalValue) FROM Order o WHERE o.date = :date AND o.paymentMethod = :method")
+	BigDecimal sumTotalValueByDateAndPaymentMethod(LocalDate date, PaymentMethod method);
+	
+	@Query("SELECT SUM (o.totalValue) FROM Order o WHERE o.date BETWEEN :date AND :finalDate")
+	BigDecimal sumTotalValueByDateBetween(LocalDate date, LocalDate finalDate);
+	
+	@Query("SELECT SUM (o.totalValue) FROM Order o WHERE o.date BETWEEN :date AND :finalDate AND o.paymentMethod = :method")
+	BigDecimal sumTotalValueByDateBetweenAndPaymentMethod(LocalDate date, LocalDate finalDate, PaymentMethod method);
+	
+	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
+			+ "FROM Order o WHERE o.date = :date GROUP By o.location.name")
+	List<TotalPerLocationDTO> findByDate(LocalDate date);
+	
+	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
+			+ "FROM Order o WHERE o.date BETWEEN :date AND :finalDate GROUP By o.location.name")
+	List<TotalPerLocationDTO> findByDateBetween(LocalDate date, LocalDate finalDate);
 }

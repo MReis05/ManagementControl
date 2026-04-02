@@ -48,6 +48,12 @@ public class MainViewController implements Initializable {
 		});
 	}
 	
+	@FXML
+	public void onBtTotalPerLocationAction() {
+		loadView("/fxml/LocationsTotalView.fxml", (LocationTotalViewController controller) ->{
+		});
+	}
+	
 	public synchronized <T> void loadView(String absoluteView, Consumer<T> consumer) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteView));

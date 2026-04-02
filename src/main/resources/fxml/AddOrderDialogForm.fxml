@@ -143,7 +143,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btCancel" mnemonicParsing="false" text="Cancelar">
+            <Button fx:id="btCancel" mnemonicParsing="false" onAction="#onBtCancelAction" text="Cancelar">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
