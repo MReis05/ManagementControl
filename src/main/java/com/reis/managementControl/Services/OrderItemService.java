@@ -1,11 +1,13 @@
 package com.reis.managementControl.Services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.reis.managementControl.Entities.OrderItem;
+import com.reis.managementControl.Entities.DTO.OrderItemHistoryDTO;
 import com.reis.managementControl.Entities.PK.OrderItemPK;
 import com.reis.managementControl.Repositories.OrderItemRepository;
 
@@ -17,6 +19,15 @@ public class OrderItemService {
 	
 	public List<OrderItem> findAll(){
 		return repository.findAll();
+	}
+	
+	public List<OrderItemHistoryDTO> findByDate(LocalDate date, LocalDate finalDate){
+		if(finalDate == null) {
+			return repository.findByDate(date);
+		}
+		else {
+			return repository.findByDateBetween(date, finalDate);
+		}
 	}
 	
 	public OrderItem findById(OrderItemPK id) {

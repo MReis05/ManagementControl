@@ -8,9 +8,10 @@ import java.util.ResourceBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.reis.managementControl.Entities.DTO.TotalPerLocationDTO;
+import com.reis.managementControl.Entities.DTO.OrderItemHistoryDTO;
+import com.reis.managementControl.Entities.Enums.Category;
 import com.reis.managementControl.Gui.Util.Utils;
-import com.reis.managementControl.Services.OrderService;
+import com.reis.managementControl.Services.OrderItemService;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -24,10 +25,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 @Component
-public class LocationTotalViewController implements Initializable {
+public class OrderItemHistoryViewController implements Initializable {
 
 	@Autowired
-	private OrderService service;
+	private OrderItemService service;
 	
 	@FXML
 	private DatePicker dpDate;
@@ -42,15 +43,18 @@ public class LocationTotalViewController implements Initializable {
 	private Button btClear;
 	
 	@FXML
-	private TableView<TotalPerLocationDTO> tableViewLocationsTotalValue;
+	private TableView<OrderItemHistoryDTO> tableViewOrderItemHistory;
 	
 	@FXML
-	private TableColumn<TotalPerLocationDTO, String> tableColumnLocations;
+	private TableColumn<OrderItemHistoryDTO, String> tableColumnProductName;
 	
 	@FXML
-	private TableColumn<TotalPerLocationDTO, BigDecimal> tableColumnTotalValues;
+	private TableColumn<OrderItemHistoryDTO, BigDecimal> tableColumnTotalValue;
 	
-	private ObservableList<TotalPerLocationDTO> obsLocationTotalValue;
+	@FXML
+	private TableColumn<OrderItemHistoryDTO, Category> tableColumnCategory;
+	
+	private ObservableList<OrderItemHistoryDTO> obsOrderItemHistory;
 	
 	@FXML
 	private void onBtSearchAction() {
@@ -62,23 +66,21 @@ public class LocationTotalViewController implements Initializable {
 			dpFinalDate.setValue(null);
 		}
 		
-		obsLocationTotalValue = FXCollections.observableArrayList(service.findByDate(startDate, finalDate));
+		obsOrderItemHistory = FXCollections.observableArrayList(service.findByDate(startDate, finalDate));
 		
 		updateTableView();
+		
 	}
 	
 	@FXML
 	private void onBtClearAction() {
-		obsLocationTotalValue.clear();
+		obsOrderItemHistory.clear();
 		updateTableView();
-		
 	}
 	
 	private void updateTableView() {
-		tableViewLocationsTotalValue.setItems(obsLocationTotalValue);
+		tableViewOrderItemHistory.setItems(obsOrderItemHistory);
 	}
-	
-	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -86,15 +88,16 @@ public class LocationTotalViewController implements Initializable {
 	}
 	
 	private void initializeNodes() {
-		InitialzeTable();
 		Utils.formatDatePicker(dpDate, "dd/MM/yyyy");
 		Utils.formatDatePicker(dpFinalDate, "dd/MM/yyyy");
+		initializeTable();
 	}
 	
-	private void InitialzeTable() {
-		tableColumnLocations.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getLocationName()));
-		tableColumnTotalValues.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalValue()));
-		Utils.formatTableColumnBigDecimal(tableColumnTotalValues, 2);
+	private void initializeTable() {
+		tableColumnProductName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
+		tableColumnTotalValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalValue()));
+		Utils.formatTableColumnBigDecimal(tableColumnTotalValue, 2);
+		tableColumnCategory.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getCategory()));
 	}
 
 }

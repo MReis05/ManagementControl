@@ -1,7 +1,6 @@
 package com.reis.managementControl.Services;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,14 +41,11 @@ public class OrderService {
 	}
 	
 	public List<TotalPerLocationDTO> findByDate(LocalDate date, LocalDate finalDate){
-			List<TotalPerLocationDTO> list = new ArrayList<>();
 		if(finalDate == null) {
-			list.addAll(repository.findByDate(date));
-			return list;
+			return repository.findByDate(date);
 		}
 		else {
-			list.addAll(repository.findByDateBetween(date, finalDate));
-			return list;
+			return repository.findByDateBetween(date, finalDate);
 		}
 	}
 	

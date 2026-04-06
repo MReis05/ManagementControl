@@ -34,7 +34,7 @@ public class MainViewController implements Initializable {
 	private Button btTotalPerLocation;
 	
 	@FXML
-	private Button btDetailsPerWeek;
+	private Button btOrderItemHistory;
 		
 	@FXML
 	public void onBDashboardAction() {
@@ -51,6 +51,12 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onBtTotalPerLocationAction() {
 		loadView("/fxml/LocationsTotalView.fxml", (LocationTotalViewController controller) ->{
+		});
+	}
+	
+	@FXML
+	public void onBtOrderHistoryAction() {
+		loadView("/fxml/OrderItemHistoryView.fxml", (OrderItemHistoryViewController controller) ->{
 		});
 	}
 	
