@@ -18,6 +18,10 @@ public class ProductService {
 		return repository.findAll();
 	}
 	
+	public List<Product> findByName(String name){
+		return repository.findByName(name);
+	}
+	
 	public Product findById(Long id) {
 		Product product = repository.findById(id).orElseThrow();
 		return product;

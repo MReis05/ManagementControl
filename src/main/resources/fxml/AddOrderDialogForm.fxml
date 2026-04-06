@@ -15,12 +15,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="719.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.AddOrderFormController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.AddOrderFormController">
    <children>
       <GridPane>
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="427.0" minWidth="10.0" prefWidth="378.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="455.0" minWidth="10.0" prefWidth="438.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -64,6 +64,7 @@
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="286.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="322.0" minWidth="10.0" prefWidth="322.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="322.0" minWidth="10.0" prefWidth="322.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -99,18 +100,24 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label text="Categoria" GridPane.rowIndex="3">
+            <TextField fx:id="txtProductName" editable="false" promptText="Digite o nome do produto" GridPane.columnIndex="1" />
+            <Button fx:id="btSearch" mnemonicParsing="false" onAction="#onBtSearchAction" text="Search" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtProductName" promptText="Digite o nome do produto" GridPane.columnIndex="1" />
+            </Button>
             <TextField fx:id="txtUnitValue" promptText="Digite o valor Unitário do produto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="txtQuantity" promptText="Digite a quantidade de produtos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <ComboBox fx:id="comboBoxCategory" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Label de erro" textFill="#ee0808" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Label de erro" textFill="#f50707" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
          </children>
       </GridPane>
       <Button fx:id="btAddProduct" mnemonicParsing="false" onAction="#onBtAddProductAction" text="Adicionar produto">
@@ -118,7 +125,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
          <VBox.margin>
-            <Insets bottom="10.0" left="450.0" top="20.0" />
+            <Insets bottom="10.0" left="450.0" top="10.0" />
          </VBox.margin>
       </Button>
       <TableView fx:id="tableViewOrderItem" prefHeight="191.0" prefWidth="612.0">
@@ -127,7 +134,8 @@
             <TableColumn fx:id="tableColumnCategory" prefWidth="151.0" text="Categoria" />
             <TableColumn fx:id="tableColumnQuantity" prefWidth="75.0" text="Quantidade" />
           <TableColumn fx:id="tableColumnUnitValue" prefWidth="104.0" text="V. Unitário" />
-            <TableColumn fx:id="tableColumnTotalValue" prefWidth="104.0" text="V.Total" />
+            <TableColumn fx:id="tableColumnTotalValue" prefWidth="119.0" text="V.Total" />
+            <TableColumn fx:id="tableColumnRemoveButton" prefWidth="117.0" />
         </columns>
          <VBox.margin>
             <Insets />

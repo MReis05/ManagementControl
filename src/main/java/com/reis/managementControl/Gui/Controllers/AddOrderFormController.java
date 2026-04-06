@@ -1,13 +1,16 @@
 package com.reis.managementControl.Gui.Controllers;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.reis.managementControl.Entities.Location;
@@ -16,6 +19,7 @@ import com.reis.managementControl.Entities.OrderItem;
 import com.reis.managementControl.Entities.Product;
 import com.reis.managementControl.Entities.Enums.Category;
 import com.reis.managementControl.Entities.Enums.PaymentMethod;
+import com.reis.managementControl.Gui.Util.Alerts;
 import com.reis.managementControl.Gui.Util.Constraints;
 import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.LocationService;
@@ -28,19 +32,31 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 @Component
 public class AddOrderFormController implements Initializable {
 	
+	@Autowired
+	private ApplicationContext applicationContext;
+	
 	private Order order;
+	
+	private Product product;
 	
 	@Autowired
 	private LocationService locationService;
@@ -79,13 +95,16 @@ public class AddOrderFormController implements Initializable {
 	private Button btCancel;
 	
 	@FXML
+	private Button btSearch;
+	
+	@FXML
 	private ComboBox<Category> comboBoxCategory;
 	
 	private ObservableList<Location> obsLocation;
 	
 	private ObservableList<PaymentMethod> obsPaymentMethod;
 	
-	private ObservableList<Category> obsCategory;
+	//private ObservableList<Category> obsCategory;
 	
 	@FXML
 	private TableView<OrderItem> tableViewOrderItem;
@@ -105,25 +124,45 @@ public class AddOrderFormController implements Initializable {
 	@FXML
 	private TableColumn<OrderItem, BigDecimal> tableColumnTotalValue;
 	
+	@FXML
+	private TableColumn<OrderItem, OrderItem> tableColumnRemoveButton;
+	
 	private ObservableList<OrderItem> obsOrderItem;
 	
 	private List<OrderItem> orderItemList = new ArrayList<>();
 	
+	
+	@FXML
+	public void onBtSearchAction(ActionEvent event) {
+		Stage stage = Utils.currentStage(event);
+		dialogForm("/fxml/SearchProductDialogForm.fxml", stage);
+	}
+	
 	@FXML
 	public void onBtAddProductAction() {
-			Product product = new Product();
-			OrderItem orderItem = new OrderItem();
-			orderItem = getFormData(product, orderItem);
-			orderItemList.add(orderItem);
-			updateTableView();
-			txtProductName.clear();
-			txtQuantity.clear();
-			txtUnitValue.clear();
-			comboBoxCategory.getSelectionModel().selectFirst();
+		if(this.product == null) {
+			Alerts.showAlert("Aviso", null, "Por favor, selecione um produto na lupa primeiro!", AlertType.WARNING);
+			return;
+		}
+		
+		Product product = new Product();
+		OrderItem orderItem = new OrderItem();
+		orderItem = getFormData(product, orderItem);
+		orderItemList.add(orderItem);
+		updateTableView();
+		txtProductName.clear();
+		txtQuantity.clear();
+		txtUnitValue.clear();
+		
+		product = null;
 	}
 	
 	@FXML
 	public void onBtSaveOrderAction(ActionEvent event) {
+		if(orderItemList.size() == 0) {
+			Alerts.showAlert("Aviso", null, "Adicione pelo menos um item antes de salvar o pedido.", AlertType.WARNING);
+			return;
+		}
 		this.order = getFormOrderData(this.order);
 		this.order = orderService.save(this.order);
 		
@@ -144,16 +183,9 @@ public class AddOrderFormController implements Initializable {
 	public void onBtCancelAction(ActionEvent event) {
 		Utils.currentStage(event).close();
 	}
-	
-	private void updateTableView() {
-		obsOrderItem = FXCollections.observableArrayList(orderItemList);
-		tableViewOrderItem.setItems(obsOrderItem);
-		
-	}
 
 	private OrderItem getFormData(Product product, OrderItem orderItem) {
-		product.setName(txtProductName.getText());
-		product.setCategory(comboBoxCategory.getValue());
+		product = this.product;
 		
 		orderItem.setProduct(product);
 		orderItem.setQuantity(new BigDecimal (txtQuantity.getText()));
@@ -184,6 +216,13 @@ public class AddOrderFormController implements Initializable {
 		
 	}
 	
+	private void updateTableView() {
+		obsOrderItem = FXCollections.observableArrayList(orderItemList);
+		tableViewOrderItem.setItems(obsOrderItem);
+		initRemoveButtons();
+		
+	}
+	
 	private void initializeNodes() {
 		Constraints.setTextFieldDouble(txtUnitValue);
 		Constraints.setTextFieldDouble(txtQuantity);
@@ -197,23 +236,73 @@ public class AddOrderFormController implements Initializable {
 	private void initializeTable() {
 		tableColumnName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getProduct().getName()));
 		tableColumnCategory.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getProduct().getCategory().name()));
-		tableColumnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+		tableColumnQuantity.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getQuantity()));
 		Utils.formatTableColumnBigDecimal(tableColumnQuantity, 3);
-		tableColumnUnitValue.setCellValueFactory(new PropertyValueFactory<>("unitValue"));
+		tableColumnUnitValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getUnitValue()));
 		Utils.formatTableColumnBigDecimal(tableColumnUnitValue, 2);
 		tableColumnTotalValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalValue()));
 		Utils.formatTableColumnBigDecimal(tableColumnTotalValue, 2);
 	}
 	
 	private void loadAssociatedObjects() {
-		obsCategory = FXCollections.observableArrayList(Category.values());
 		obsPaymentMethod = FXCollections.observableArrayList(PaymentMethod.values());
 		obsLocation = FXCollections.observableArrayList(locationService.findAll());
 		
-		comboBoxCategory.setItems(obsCategory);
 		comboBoxPaymentMethods.setItems(obsPaymentMethod);
 		comboBoxLocations.setItems(obsLocation);
 		Utils.formatComboBoxLocation(comboBoxLocations);
+	}
+	
+	private void removeEntity(OrderItem obj) {
+		Optional<ButtonType> result = Alerts.showConfirmation("Removendo Item",
+				"Tem certeza que deseja apagar o Item?");
+		if (result.get() == ButtonType.OK) {
+			obsOrderItem.remove(obj);
+			orderItemList.remove(obj);
+		}
+	}
+	
+	private void initRemoveButtons() {
+		tableColumnRemoveButton.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnRemoveButton.setCellFactory(param -> new TableCell<OrderItem, OrderItem>() {
+			private final Button button = new Button("remove");
+
+			@Override
+			protected void updateItem(OrderItem obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> removeEntity(obj));
+			}
+		});
+	}
+	
+	public void dialogForm(String absoluteView, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteView));
+			loader.setControllerFactory(applicationContext::getBean);
+			VBox vbox = loader.load();
+			
+			SearchProductFormController controller = loader.getController();
+			controller.subscribeAddProductListener((Product product) ->{
+				this.product = product;
+				txtProductName.setText(product.getName());
+			});
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Entre com os dados do produto");
+			dialogStage.setScene(new Scene(vbox));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Order getOrder() {
