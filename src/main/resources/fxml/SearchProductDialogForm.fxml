@@ -45,7 +45,12 @@
                </GridPane.margin>
             </Label>
             <ComboBox fx:id="comboBoxCategory" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Label de Erro" textFill="#e40a0a" GridPane.columnIndex="2">
+            <Label fx:id="labelErrorProductName" textFill="#e40a0a" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label fx:id="labelErrorCategory" textFill="#ff0606" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>

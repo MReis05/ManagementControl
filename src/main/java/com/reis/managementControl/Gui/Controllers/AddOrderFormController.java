@@ -6,8 +6,10 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +19,6 @@ import com.reis.managementControl.Entities.Location;
 import com.reis.managementControl.Entities.Order;
 import com.reis.managementControl.Entities.OrderItem;
 import com.reis.managementControl.Entities.Product;
-import com.reis.managementControl.Entities.Enums.Category;
 import com.reis.managementControl.Entities.Enums.PaymentMethod;
 import com.reis.managementControl.Gui.Listerners.DataChangeListener;
 import com.reis.managementControl.Gui.Util.Alerts;
@@ -26,6 +27,7 @@ import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.LocationService;
 import com.reis.managementControl.Services.OrderService;
 import com.reis.managementControl.Services.ProductService;
+import com.reis.managementControl.Services.Exceptions.ValidationExceptions;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -41,6 +43,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -101,13 +104,20 @@ public class AddOrderFormController implements Initializable {
 	private Button btSearch;
 	
 	@FXML
-	private ComboBox<Category> comboBoxCategory;
+	private Label labelErrorUnitValue;
+	
+	@FXML
+	private Label labelErrorQuantity;
+	
+	@FXML
+	private Label labelErrorLocation;
+	
+	@FXML
+	private Label labelErrorPaymentMethod;
 	
 	private ObservableList<Location> obsLocation;
 	
 	private ObservableList<PaymentMethod> obsPaymentMethod;
-	
-	//private ObservableList<Category> obsCategory;
 	
 	@FXML
 	private TableView<OrderItem> tableViewOrderItem;
@@ -143,44 +153,54 @@ public class AddOrderFormController implements Initializable {
 	
 	@FXML
 	public void onBtAddProductAction() {
-		if(this.product == null) {
-			Alerts.showAlert("Aviso", null, "Por favor, selecione um produto na lupa primeiro!", AlertType.WARNING);
-			return;
+		try {
+			if(this.product == null) {
+				Alerts.showAlert("Aviso", null, "Por favor, selecione um produto na lupa primeiro!", AlertType.WARNING);
+				return;
+			}
+			
+			Product product = new Product();
+			OrderItem orderItem = new OrderItem();
+			orderItem = getFormData(product, orderItem);
+			orderItemList.add(orderItem);
+			updateTableView();
+			txtProductName.clear();
+			txtQuantity.clear();
+			txtUnitValue.clear();
+			
+			product = null;
 		}
-		
-		Product product = new Product();
-		OrderItem orderItem = new OrderItem();
-		orderItem = getFormData(product, orderItem);
-		orderItemList.add(orderItem);
-		updateTableView();
-		txtProductName.clear();
-		txtQuantity.clear();
-		txtUnitValue.clear();
-		
-		product = null;
+		catch(ValidationExceptions e) {
+			setErrorMessages(e.getErrors());
+		}
 	}
 	
 	@FXML
 	public void onBtSaveOrderAction(ActionEvent event) {
-		if(orderItemList.size() == 0) {
-			Alerts.showAlert("Aviso", null, "Adicione pelo menos um item antes de salvar o pedido.", AlertType.WARNING);
-			return;
+		try {
+			if(orderItemList.size() == 0) {
+				Alerts.showAlert("Aviso", null, "Adicione pelo menos um item antes de salvar o pedido.", AlertType.WARNING);
+				return;
+			}
+			this.order = getFormOrderData(this.order);
+			this.order = orderService.save(this.order);
+			
+			for(OrderItem i : orderItemList) {
+				Product p = i.getProduct();
+				productService.save(p);
+				i.setOrder(this.order);
+			}
+			
+			this.order.getItems().addAll(orderItemList);
+			this.order.updateTotal();
+			this.order = orderService.save(order);
+			orderItemList.clear();
+			notifyDataChangeListeners(order.getTotalValue());
+			Utils.currentStage(event).close();
 		}
-		this.order = getFormOrderData(this.order);
-		this.order = orderService.save(this.order);
-		
-		for(OrderItem i : orderItemList) {
-			Product p = i.getProduct();
-			productService.save(p);
-			i.setOrder(this.order);
+		catch(ValidationExceptions e) {
+			setErrorMessages(e.getErrors());
 		}
-		
-		this.order.getItems().addAll(orderItemList);
-		this.order.updateTotal();
-		this.order = orderService.save(order);
-		orderItemList.clear();
-		notifyDataChangeListeners(order.getTotalValue());
-		Utils.currentStage(event).close();
 	}
 	
 	@FXML
@@ -189,15 +209,39 @@ public class AddOrderFormController implements Initializable {
 	}
 
 	private OrderItem getFormData(Product product, OrderItem orderItem) {
+		labelErrorQuantity.setText("");
+		labelErrorUnitValue.setText("");
 		product = this.product;
 		
+		ValidationExceptions exceptions = new ValidationExceptions("Validation Error");
+		
 		orderItem.setProduct(product);
-		orderItem.setQuantity(new BigDecimal (txtQuantity.getText()));
-		orderItem.setUnitValue(new BigDecimal(txtUnitValue.getText()));
+		if(txtQuantity.getText() == null || txtQuantity.getText().trim().isEmpty()) {
+			exceptions.addError("Quantity", "Field can't be empty");
+		}
+		else {
+			orderItem.setQuantity(new BigDecimal (txtQuantity.getText()));
+		}
+		if(txtUnitValue.getText() == null || txtUnitValue.getText().trim().isEmpty()) {
+			exceptions.addError("Unit Value", "Field can't be empty");
+		}
+		else {
+			orderItem.setUnitValue(new BigDecimal(txtUnitValue.getText()));
+		}
+		
+		if(!exceptions.getErrors().isEmpty()) {
+			throw exceptions;
+		}
+		
 		return orderItem;
 	}
 	
 	private Order getFormOrderData(Order order) {
+		labelErrorLocation.setText("");
+		labelErrorPaymentMethod.setText("");
+		
+		ValidationExceptions exception = new ValidationExceptions("Validation Error");
+		
 		if(dpPurchaseDate != null && dpPurchaseDate.getValue() != null) {
 			order.setDate(dpPurchaseDate.getValue());
 		}
@@ -205,12 +249,28 @@ public class AddOrderFormController implements Initializable {
 			order.setDate(LocalDate.now());
 		}
 		
-		order.setPaymentMethod(comboBoxPaymentMethods.getValue());
-		Location locationSelected = comboBoxLocations.getValue();
-		if(locationSelected.getId() == null) {
-			locationSelected = locationService.save(locationSelected);
+		if(comboBoxPaymentMethods.getValue() == null) {
+			exception.addError("Payment Method", "You must select one Payment Method");
 		}
-		order.setLocation(locationSelected);
+		else {
+			order.setPaymentMethod(comboBoxPaymentMethods.getValue());
+		}
+		
+		if(comboBoxLocations.getValue() == null) {
+			exception.addError("Location", "You must select one Location");
+		}
+		else {
+			Location locationSelected = comboBoxLocations.getValue();
+			if(locationSelected.getId() == null) {
+				locationSelected = locationService.save(locationSelected);
+			}
+			order.setLocation(locationSelected);
+		}
+		
+		if(!exception.getErrors().isEmpty()) {
+			throw exception;
+		}
+		
 		return order;
 	}
 	
@@ -292,6 +352,15 @@ public class AddOrderFormController implements Initializable {
 				button.setOnAction(event -> removeEntity(obj));
 			}
 		});
+	}
+	
+	private void setErrorMessages(Map<String, String> errors) {
+		Set<String> keys = errors.keySet();
+		
+		labelErrorQuantity.setText(keys.contains("Quantity") ? errors.get("Quantity") : "");
+		labelErrorUnitValue.setText(keys.contains("Unit Value") ? errors.get("Unit Value") : "");
+		labelErrorLocation.setText(keys.contains("Location") ? errors.get("Location") : "");
+		labelErrorPaymentMethod.setText(keys.contains("Payment Method") ? errors.get("Payment Method") : "");
 	}
 	
 	public void dialogForm(String absoluteView, Stage parentStage) {

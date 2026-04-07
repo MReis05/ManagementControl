@@ -3,8 +3,10 @@ package com.reis.managementControl.Gui.Controllers;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import com.reis.managementControl.Gui.Listerners.AddProductListener;
 import com.reis.managementControl.Gui.Util.Alerts;
 import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.ProductService;
+import com.reis.managementControl.Services.Exceptions.ValidationExceptions;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -26,6 +29,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -51,6 +55,12 @@ public class SearchProductFormController implements Initializable {
 	
 	@FXML
 	private Button btSave;
+	
+	@FXML
+	private Label labelErrorProductName;
+	
+	@FXML
+	private Label labelErrorCategory;
 	
 	@FXML
 	private TableView<Product> tableViewProduct;
@@ -82,16 +92,38 @@ public class SearchProductFormController implements Initializable {
 	
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
-		Product product = new Product();
-		product = getFormData(product);
-		service.save(product);
-		notifyAddProductListeners(product);
-		Utils.currentStage(event).close();
+		try {
+			Product product = new Product();
+			product = getFormData(product);
+			service.save(product);
+			notifyAddProductListeners(product);
+			Utils.currentStage(event).close();
+		}
+		catch(ValidationExceptions e) {
+			setErrorMessages(e.getErrors());
+		}
 	}
 	
 	private Product getFormData(Product product) {
+		labelErrorProductName.setText("");
+		
+		ValidationExceptions exception = new ValidationExceptions("Validation Error");
+		
+		if(txtProductName.getText() == null || txtProductName.getText().trim().isEmpty()) {
+			exception.addError("Product Name", "Field can't be empty");
+		}
 		product.setName(txtProductName.getText());
-		product.setCategory(comboBoxCategory.getValue());
+		if(comboBoxCategory.getValue() == null) {
+			exception.addError("Category", "You must select one Category");
+		}
+		else {
+			product.setCategory(comboBoxCategory.getValue());
+		}
+		
+		if(!exception.getErrors().isEmpty()) {
+			throw exception;
+		}
+		
 		return product;
 	}
 	
@@ -159,5 +191,12 @@ public class SearchProductFormController implements Initializable {
 				button.setOnAction(event -> selectProduct(obj, event));
 			}
 		});
+	}
+	
+	private void setErrorMessages(Map<String, String> errors) {
+		Set<String> keys = errors.keySet();
+		
+		labelErrorProductName.setText(keys.contains("Product Name") ? errors.get("Product Name"): "");
+		labelErrorCategory.setText(keys.contains("Category") ? errors.get("Category") : "");
 	}
 }
