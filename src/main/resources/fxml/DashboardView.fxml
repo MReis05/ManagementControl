@@ -13,35 +13,66 @@
    <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label fx:id="currentCashier" text="Caixa Atual">
-               <font>
-                  <Font size="20.0" />
-               </font>
+            <VBox>
                <HBox.margin>
                   <Insets left="20.0" top="20.0" />
                </HBox.margin>
-            </Label>
-            <Label fx:id="expectedTransfer" text="Repasse esperado">
-               <font>
-                  <Font size="20.0" />
-               </font>
+               <children>
+                  <Label text="Caixa Atual">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="currentCashier" text="386.01">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox>
                <HBox.margin>
                   <Insets left="60.0" top="20.0" />
                </HBox.margin>
-            </Label>
-            <Button fx:id="btIncreaseTransfer" mnemonicParsing="false" text="+">
-               <HBox.margin>
-                  <Insets left="5.0" top="20.0" />
-               </HBox.margin>
-            </Button>
-            <Label fx:id="currentCashierPlusTransfer" text="Caixa + Repasse">
+               <children>
+                  <Label text="Repasse Esperado">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="expectedTransfer" text="0.00">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="60.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox>
                <HBox.margin>
                   <Insets left="80.0" top="20.0" />
                </HBox.margin>
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
+               <children>
+                  <Label text="Caixa + Repasse">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="currentCashierPlusTransfer" text="0.00">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="55.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
          </children>
       </HBox>
       <HBox prefHeight="36.0" prefWidth="612.0">
@@ -53,6 +84,14 @@
                <HBox.margin>
                   <Insets left="20.0" top="20.0" />
                </HBox.margin>
+            </Button>
+            <Button fx:id="btUpdateValues" mnemonicParsing="false" onAction="#onBtUpdateValuesAction" text="Atualizar valores">
+               <HBox.margin>
+                  <Insets left="5.0" top="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
             </Button>
          </children>
       </HBox>

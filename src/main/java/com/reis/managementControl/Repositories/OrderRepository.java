@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -32,4 +33,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
 			+ "FROM Order o WHERE o.date BETWEEN :date AND :finalDate GROUP By o.location.name")
 	List<TotalPerLocationDTO> findByDateBetween(LocalDate date, LocalDate finalDate);
+	
+	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
+			+ "FROM Order o WHERE o.date BETWEEN :monday AND :sunday GROUP By o.location.name ORDER BY SUM(o.totalValue) DESC")
+	List<TotalPerLocationDTO> findByDateBetweenWeekly(LocalDate monday, LocalDate sunday, Pageable pageable);
 }

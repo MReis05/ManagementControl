@@ -19,6 +19,7 @@ import com.reis.managementControl.Entities.OrderItem;
 import com.reis.managementControl.Entities.Product;
 import com.reis.managementControl.Entities.Enums.Category;
 import com.reis.managementControl.Entities.Enums.PaymentMethod;
+import com.reis.managementControl.Gui.Listerners.DataChangeListener;
 import com.reis.managementControl.Gui.Util.Alerts;
 import com.reis.managementControl.Gui.Util.Constraints;
 import com.reis.managementControl.Gui.Util.Utils;
@@ -57,6 +58,8 @@ public class AddOrderFormController implements Initializable {
 	private Order order;
 	
 	private Product product;
+	
+	private DataChangeListener listener;
 	
 	@Autowired
 	private LocationService locationService;
@@ -176,6 +179,7 @@ public class AddOrderFormController implements Initializable {
 		this.order.updateTotal();
 		this.order = orderService.save(order);
 		orderItemList.clear();
+		notifyDataChangeListeners(order.getTotalValue());
 		Utils.currentStage(event).close();
 	}
 	
@@ -208,6 +212,16 @@ public class AddOrderFormController implements Initializable {
 		}
 		order.setLocation(locationSelected);
 		return order;
+	}
+	
+	private void notifyDataChangeListeners(BigDecimal totalValue) {
+		if(listener != null) {
+			listener.updateValues(totalValue);
+		}
+	}
+	
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		this.listener = listener;
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.reis.managementControl.Entities.Order;
@@ -47,6 +49,11 @@ public class OrderService {
 		else {
 			return repository.findByDateBetween(date, finalDate);
 		}
+	}
+	
+	public List<TotalPerLocationDTO> findByDateWeeklyRanking(LocalDate monday, LocalDate sunday){
+		Pageable pageable = PageRequest.of(0, 5);
+		return repository.findByDateBetweenWeekly(monday, sunday, pageable);
 	}
 	
 	public Order findById(Long id) {
