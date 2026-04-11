@@ -3,6 +3,9 @@ package com.reis.managementControl.Gui.Controllers;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.reis.managementControl.Entities.DTO.OrderItemHistoryDTO;
 import com.reis.managementControl.Entities.Enums.Category;
+import com.reis.managementControl.Gui.Util.ImageManager;
 import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.OrderItemService;
 
@@ -23,6 +27,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 
 @Component
 public class OrderItemHistoryViewController implements Initializable {
@@ -35,6 +41,9 @@ public class OrderItemHistoryViewController implements Initializable {
 	
 	@FXML
 	private DatePicker dpFinalDate;
+	
+	@FXML
+	private TextField txtProductName;
 	
 	@FXML
 	private Button btSearch;
@@ -58,15 +67,20 @@ public class OrderItemHistoryViewController implements Initializable {
 	
 	@FXML
 	private void onBtSearchAction() {
+		List<String> names = new ArrayList<>();
+		if(txtProductName.getText() != null && !txtProductName.getText().trim().isEmpty()) {
+			names.addAll(Arrays.asList(txtProductName.getText().split("\\s*,\\s*")));
+		}
 		LocalDate startDate = dpDate.getValue();
 		LocalDate finalDate = dpFinalDate.getValue();
+		
 		
 		if(dpFinalDate.getEditor().getText().trim().isEmpty()) {
 			finalDate = null;
 			dpFinalDate.setValue(null);
 		}
 		
-		obsOrderItemHistory = FXCollections.observableArrayList(service.findByDate(startDate, finalDate));
+		obsOrderItemHistory = FXCollections.observableArrayList(service.findByDate(startDate, finalDate, names));
 		
 		updateTableView();
 		
@@ -91,6 +105,7 @@ public class OrderItemHistoryViewController implements Initializable {
 		Utils.formatDatePicker(dpDate, "dd/MM/yyyy");
 		Utils.formatDatePicker(dpFinalDate, "dd/MM/yyyy");
 		initializeTable();
+		initalizeResources();
 	}
 	
 	private void initializeTable() {
@@ -98,6 +113,15 @@ public class OrderItemHistoryViewController implements Initializable {
 		tableColumnTotalValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalValue()));
 		Utils.formatTableColumnBigDecimal(tableColumnTotalValue, 2);
 		tableColumnCategory.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getCategory()));
+	}
+	
+	private void initalizeResources() {
+		ImageView search = new ImageView(ImageManager.getImage("searchIcon"));
+		
+		search.setFitHeight(23);
+		search.setFitWidth(23);
+		
+		btSearch.setGraphic(search);
 	}
 
 }

@@ -23,6 +23,7 @@ import com.reis.managementControl.Entities.Enums.PaymentMethod;
 import com.reis.managementControl.Gui.Listerners.DataChangeListener;
 import com.reis.managementControl.Gui.Util.Alerts;
 import com.reis.managementControl.Gui.Util.Constraints;
+import com.reis.managementControl.Gui.Util.ImageManager;
 import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.LocationService;
 import com.reis.managementControl.Services.OrderService;
@@ -48,6 +49,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -205,6 +207,7 @@ public class AddOrderFormController implements Initializable {
 	
 	@FXML
 	public void onBtCancelAction(ActionEvent event) {
+		orderItemList.clear();
 		Utils.currentStage(event).close();
 	}
 
@@ -305,6 +308,7 @@ public class AddOrderFormController implements Initializable {
 		Utils.formatDatePicker(dpPurchaseDate, "dd/MM/yyyy");
 		loadAssociatedObjects();
 		initializeTable();
+		initializeResources();
 	}
 	
 	private void initializeTable() {
@@ -325,6 +329,25 @@ public class AddOrderFormController implements Initializable {
 		comboBoxPaymentMethods.setItems(obsPaymentMethod);
 		comboBoxLocations.setItems(obsLocation);
 		Utils.formatComboBoxLocation(comboBoxLocations);
+	}
+	
+	private void initializeResources() {
+		ImageView search = new ImageView(ImageManager.getImage("searchIcon"));
+		ImageView save = new ImageView(ImageManager.getImage("saveIcon"));
+		ImageView plus = new ImageView(ImageManager.getImage("plusIcon"));
+		
+		search.setFitHeight(16);
+		search.setFitWidth(16);
+		
+		save.setFitHeight(23);
+		save.setFitWidth(23);
+		
+		plus.setFitHeight(23);
+		plus.setFitWidth(23);
+		
+		btSearch.setGraphic(search);
+		btSaveOrder.setGraphic(save);
+		btAddProduct.setGraphic(plus);
 	}
 	
 	private void removeEntity(OrderItem obj) {
@@ -378,6 +401,7 @@ public class AddOrderFormController implements Initializable {
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com os dados do produto");
 			dialogStage.setScene(new Scene(vbox));
+			dialogStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);

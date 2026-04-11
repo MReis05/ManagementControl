@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.reis.managementControl.Gui.Util.ImageManager;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 @Component
@@ -83,6 +86,31 @@ public class MainViewController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		initializeResources();
+	}
+	
+	private void initializeResources() {
+		ImageView dashboard = new ImageView(ImageManager.getImage("dashboard"));
+		ImageView dailyTotal = new ImageView(ImageManager.getImage("dailyTotal"));
+		ImageView location = new ImageView(ImageManager.getImage("location"));
+		ImageView orderItemHistory = new ImageView(ImageManager.getImage("orderItemHistory"));
+		
+		dashboard.setFitHeight(32);
+		dashboard.setFitWidth(32);
+		
+		dailyTotal.setFitHeight(32);
+		dailyTotal.setFitWidth(32);
+		
+		location.setFitHeight(32);
+		location.setFitWidth(32);
+		
+		orderItemHistory.setFitHeight(32);
+		orderItemHistory.setFitWidth(32);
+		
+		btDashboard.setGraphic(dashboard);
+		btDailyTotal.setGraphic(dailyTotal);
+		btTotalPerLocation.setGraphic(location);
+		btOrderItemHistory.setGraphic(orderItemHistory);
 	}
 
 }

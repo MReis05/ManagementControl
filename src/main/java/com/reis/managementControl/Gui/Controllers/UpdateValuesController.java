@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.reis.managementControl.Gui.Listerners.UpdateValuesListener;
 import com.reis.managementControl.Gui.Util.Constraints;
+import com.reis.managementControl.Gui.Util.ImageManager;
 import com.reis.managementControl.Gui.Util.Utils;
 
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 
 @Component
 public class UpdateValuesController implements Initializable {
@@ -62,6 +64,16 @@ public class UpdateValuesController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Constraints.setTextFieldDouble(txtCurrentCashier);
 		Constraints.setTextFieldDouble(txtExpectedTransfer);
+		initializeResources();
+	}
+	
+	private void initializeResources() {
+		ImageView save = new ImageView(ImageManager.getImage("saveIcon"));
+		
+		save.setFitHeight(23);
+		save.setFitWidth(23);
+		
+		btSave.setGraphic(save);
 	}
 	
 	

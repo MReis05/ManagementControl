@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.LocationTotalViewController">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.LocationTotalViewController">
    <children>
-      <Label text="Total por Locais">
+      <Label alignment="CENTER" text="Total por Locais">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
@@ -20,44 +25,82 @@
             <Insets left="20.0" top="20.0" />
          </VBox.margin>
       </Label>
-      <DatePicker fx:id="dpDate" promptText="Data inicial">
-         <VBox.margin>
-            <Insets left="400.0" />
-         </VBox.margin>
-      </DatePicker>
-      <DatePicker fx:id="dpFinalDate" promptText="Data Final">
-         <VBox.margin>
-            <Insets bottom="5.0" left="400.0" top="5.0" />
-         </VBox.margin>
-      </DatePicker>
-      <HBox prefHeight="65.0" prefWidth="600.0">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
+      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+        <columnConstraints>
+          <ColumnConstraints hgrow="ALWAYS" />
+          <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="1.7976931348623157E308" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints percentHeight="70.0" vgrow="ALWAYS" />
+          <RowConstraints percentHeight="30.0" />
+        </rowConstraints>
          <children>
-            <Button fx:id="btSearch" mnemonicParsing="false" onAction="#onBtSearchAction" text="Search">
-               <HBox.margin>
-                  <Insets left="400.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="btClear" mnemonicParsing="false" onAction="#onBtClearAction" text="Clear">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
+            <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.vgrow="ALWAYS">
+               <children>
+                  <DatePicker fx:id="dpDate" promptText="Data inicial">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </DatePicker>
+                  <DatePicker fx:id="dpFinalDate" promptText="Data Final">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </DatePicker>
+                  <TextField fx:id="txtProductNames" maxWidth="-Infinity" prefHeight="25.0" prefWidth="176.0" promptText="Pesquisar Locais">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </TextField>
+               </children>
+               <GridPane.margin>
+                  <Insets right="7.0" />
+               </GridPane.margin>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="btSearch" alignment="CENTER" mnemonicParsing="false" onAction="#onBtSearchAction" text="Filtrar">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="new-button" />
+                        <String fx:value="save-buttons" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="btClear" mnemonicParsing="false" onAction="#onBtClearAction" text="Limpar">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="settings-button" />
+                        <String fx:value="settings-form" />
+                     </styleClass>
+                  </Button>
+               </children>
+               <GridPane.margin>
+                  <Insets right="10.0" top="5.0" />
+               </GridPane.margin>
+            </HBox>
          </children>
-      </HBox>
-      <TableView fx:id="tableViewLocationsTotalValue" prefHeight="200.0" prefWidth="200.0">
+         <VBox.margin>
+            <Insets bottom="10.0" top="50.0" />
+         </VBox.margin>
+      </GridPane>
+      <TableView fx:id="tableViewLocationsTotalValue" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="table" VBox.vgrow="ALWAYS">
         <columns>
           <TableColumn fx:id="tableColumnLocations" prefWidth="131.0" text="Local" />
           <TableColumn fx:id="tableColumnTotalValues" prefWidth="202.0" text="Valor" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </children>
 </VBox>

@@ -31,8 +31,18 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	List<TotalPerLocationDTO> findByDate(LocalDate date);
 	
 	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
+			+ "FROM Order o WHERE o.date = :date AND o.location.name IN :names "
+			+ "GROUP By o.location.name")
+	List<TotalPerLocationDTO> findByDateAndNames(LocalDate date, List<String> names);
+	
+	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
 			+ "FROM Order o WHERE o.date BETWEEN :date AND :finalDate GROUP By o.location.name")
 	List<TotalPerLocationDTO> findByDateBetween(LocalDate date, LocalDate finalDate);
+	
+	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
+			+ "FROM Order o WHERE o.date BETWEEN :date AND :finalDate AND o.location.name IN :names "
+			+ "GROUP By o.location.name")
+	List<TotalPerLocationDTO> findByDateBetweenAndNames(LocalDate date, LocalDate finalData, List<String> names);
 	
 	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
 			+ "FROM Order o WHERE o.date BETWEEN :monday AND :sunday GROUP By o.location.name ORDER BY SUM(o.totalValue) DESC")

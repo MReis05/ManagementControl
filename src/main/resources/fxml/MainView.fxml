@@ -7,24 +7,24 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="558.0" prefWidth="712.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.MainViewController">
    <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="100.0" styleClass="side-bar" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btDashboard" mnemonicParsing="false" onAction="#onBDashboardAction" text="Tela inicial">
+            <Button fx:id="btDashboard" mnemonicParsing="false" onAction="#onBDashboardAction">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btDailyTotal" mnemonicParsing="false" onAction="#onBtDailyTotalAction" text="Totais Diários">
+            <Button fx:id="btDailyTotal" mnemonicParsing="false" onAction="#onBtDailyTotalAction">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btTotalPerLocation" mnemonicParsing="false" onAction="#onBtTotalPerLocationAction" text="Totais P/ Local">
+            <Button fx:id="btTotalPerLocation" mnemonicParsing="false" onAction="#onBtTotalPerLocationAction">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btOrderItemHistory" mnemonicParsing="false" onAction="#onBtOrderHistoryAction" text="Detalhado">
+            <Button fx:id="btOrderItemHistory" mnemonicParsing="false" onAction="#onBtOrderHistoryAction">
                <VBox.margin>
                   <Insets left="10.0" top="10.0" />
                </VBox.margin>
@@ -33,7 +33,7 @@
       </VBox>
    </left>
    <center>
-      <VBox fx:id="contentHolder" BorderPane.alignment="CENTER">
+      <VBox fx:id="contentHolder" styleClass="main-vbox" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>

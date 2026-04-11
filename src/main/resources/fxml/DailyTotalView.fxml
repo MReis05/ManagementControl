@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -11,9 +12,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.DailyTotalViewController">
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.reis.managementControl.Gui.Controllers.DailyTotalViewController">
    <children>
-      <Label text="Total Diário">
+      <Label alignment="TOP_LEFT" text="Total Diário">
          <VBox.margin>
             <Insets left="20.0" top="20.0" />
          </VBox.margin>
@@ -21,151 +22,143 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <DatePicker fx:id="dpDate" promptText="Data Inicial">
-         <VBox.margin>
-            <Insets left="400.0" />
-         </VBox.margin>
-      </DatePicker>
-      <DatePicker fx:id="dpFinalDate" promptText="Data Final">
-         <VBox.margin>
-            <Insets bottom="5.0" left="400.0" top="5.0" />
-         </VBox.margin>
-      </DatePicker>
-      <HBox prefHeight="65.0" prefWidth="600.0">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <children>
-            <Button fx:id="btSearch" mnemonicParsing="false" onAction="#onBtSearchAction" text="Search">
-               <HBox.margin>
-                  <Insets left="400.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="btClear" mnemonicParsing="false" onAction="#onBtClearAction" text="Clear">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-         </children>
-      </HBox>
-      <GridPane gridLinesVisible="true" prefHeight="277.0" prefWidth="580.0" VBox.vgrow="NEVER">
+      <GridPane alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="0.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
+          <RowConstraints percentHeight="60.0" vgrow="ALWAYS" />
+          <RowConstraints percentHeight="40.0" vgrow="ALWAYS" />
         </rowConstraints>
-         <VBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
-         </VBox.margin>
          <children>
-            <HBox fillHeight="false" prefHeight="67.0" prefWidth="290.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.vgrow="ALWAYS">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
+            <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.vgrow="ALWAYS">
                <children>
-                  <Label alignment="CENTER" text="Total">
-                     <font>
-                        <Font name="System Bold" size="29.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="25.0" top="15.0" />
-                     </HBox.margin>
-                  </Label>
+                  <DatePicker fx:id="dpDate" promptText="Data Inicial">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </DatePicker>
+                  <DatePicker fx:id="dpFinalDate" promptText="Data Final">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </DatePicker>
                </children>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
+               <GridPane.margin>
+                  <Insets right="7.0" />
+               </GridPane.margin>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" nodeOrientation="LEFT_TO_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="btSearch" alignment="CENTER" mnemonicParsing="false" onAction="#onBtSearchAction" text="Filtrar">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="new-button" />
+                        <String fx:value="save-buttons" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="btClear" mnemonicParsing="false" onAction="#onBtClearAction" text="Limpar">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="settings-button" />
+                        <String fx:value="settings-form" />
+                     </styleClass>
+                  </Button>
+               </children>
+               <GridPane.margin>
+                  <Insets right="10.0" top="5.0" />
+               </GridPane.margin>
             </HBox>
-            <HBox fillHeight="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+         </children>
+         <VBox.margin>
+            <Insets bottom="70.0" top="50.0" />
+         </VBox.margin>
+      </GridPane>
+      <VBox alignment="CENTER" styleClass="card-value" VBox.vgrow="NEVER">
+         <children>
+            <Label alignment="CENTER" text="Total">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelTotalValue" alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="100.0" right="100.0" />
+         </VBox.margin>
+      </VBox>
+      <HBox VBox.vgrow="ALWAYS">
+         <children>
+            <VBox alignment="CENTER" styleClass="card-value" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="CENTER" text="Dinheiro">
                      <font>
-                        <Font name="System Bold" size="29.0" />
+                        <Font size="20.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="20.0" top="15.0" />
-                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="labelCashTotalValue">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
                   </Label>
                </children>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </HBox>
-            <HBox GridPane.columnSpan="2" GridPane.rowIndex="2">
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox alignment="CENTER" styleClass="card-value" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
                <children>
                   <Label alignment="CENTER" text="Cartão">
                      <font>
-                        <Font name="System Bold" size="29.0" />
+                        <Font size="20.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="20.0" top="15.0" />
-                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="labelCardTotlValue">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
                   </Label>
                </children>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </HBox>
-            <HBox GridPane.columnSpan="2" GridPane.rowIndex="3">
+            </VBox>
+            <VBox alignment="CENTER" styleClass="card-value" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="50.0" right="30.0" />
+               </HBox.margin>
                <children>
                   <Label alignment="CENTER" text="Pix">
                      <font>
-                        <Font name="System Bold" size="29.0" />
+                        <Font size="20.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets left="20.0" top="10.0" />
-                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="labelPixTotalValue">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
                   </Label>
                </children>
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </HBox>
-            <Label fx:id="labelTotalValue" GridPane.columnIndex="1">
-               <GridPane.margin>
-                  <Insets left="30.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Bold" size="29.0" />
-               </font>
-            </Label>
-            <Label fx:id="labelCashTotalValue" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <font>
-                  <Font name="System Bold" size="29.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="30.0" />
-               </GridPane.margin>
-            </Label>
-            <Label fx:id="labelCardTotlValue" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
-               <font>
-                  <Font name="System Bold" size="29.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets left="30.0" />
-               </GridPane.margin>
-            </Label>
-            <Label fx:id="labelPixTotalValue" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <GridPane.margin>
-                  <Insets left="30.0" />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Bold" size="29.0" />
-               </font>
-            </Label>
+            </VBox>
          </children>
-      </GridPane>
+         <padding>
+            <Insets bottom="20.0" />
+         </padding>
+      </HBox>
    </children>
 </VBox>

@@ -23,12 +23,22 @@ public class OrderItemService {
 		return repository.findAll();
 	}
 	
-	public List<OrderItemHistoryDTO> findByDate(LocalDate date, LocalDate finalDate){
+	public List<OrderItemHistoryDTO> findByDate(LocalDate date, LocalDate finalDate, List<String> names){
 		if(finalDate == null) {
-			return repository.findByDate(date);
+			if(names.size() > 0) {
+				return repository.findByDateAndNames(date, names);
+			}
+			else {
+				return repository.findByDate(date);
+			}
 		}
 		else {
-			return repository.findByDateBetween(date, finalDate);
+			if(names.size() > 0) {
+				return repository.findByDateBetweenAndNames(date, finalDate, names);
+			}
+			else {
+				return repository.findByDateBetween(date, finalDate);
+			}
 		}
 	}
 	

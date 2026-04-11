@@ -12,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.reis.managementControl.Entities.Cashier;
 import com.reis.managementControl.Entities.Order;
 import com.reis.managementControl.Entities.DTO.OrderItemHistoryDTO;
 import com.reis.managementControl.Entities.DTO.TotalPerLocationDTO;
+import com.reis.managementControl.Gui.Util.ImageManager;
 import com.reis.managementControl.Gui.Util.Utils;
+import com.reis.managementControl.Services.CashierService;
 import com.reis.managementControl.Services.OrderItemService;
 import com.reis.managementControl.Services.OrderService;
 
@@ -32,6 +35,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,6 +43,9 @@ import javafx.stage.Stage;
 @Component
 public class DashboardController implements Initializable {
 
+	@Autowired
+	private CashierService cashierService;
+	
 	@Autowired
 	private OrderItemService orderItemService;
 	
@@ -108,15 +115,18 @@ public class DashboardController implements Initializable {
 			Order order = new Order();
 			controller.setOrder(order);
 			controller.subscribeDataChangeListener((BigDecimal totalValue) ->{
-				BigDecimal currentValue = new BigDecimal(currentCashier.getText());
-				BigDecimal currentValueMinusOrder = currentValue.subtract(totalValue);
-				currentCashier.setText(currentValueMinusOrder.toString());
-				updateNodes();
+				Cashier cashier = cashierService.getCompanyCashier();
+				BigDecimal currentValueMinusOrder = cashier.getCurrentCashier().subtract(totalValue);
+				cashier.setCurrentCashier(currentValueMinusOrder);
+				cashier.updateTotal();
+				cashier = cashierService.save(cashier);
+				updateNodes(cashier);
 			});
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com os dados da compra");
 			dialogStage.setScene(new Scene(vbox));
+			dialogStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -135,18 +145,22 @@ public class DashboardController implements Initializable {
 			
 			UpdateValuesController controller = loader.getController();
 			controller.subscribeUpdateValuesListener((BigDecimal current, BigDecimal expected) ->{
+				Cashier cashier = cashierService.getCompanyCashier();
 				if(current.compareTo(BigDecimal.ZERO) > 0) {
-					currentCashier.setText(current.toString());
+					cashier.setCurrentCashier(current);
 				}
 				if(expected.compareTo(BigDecimal.ZERO) > 0) {
-					expectedTransfer.setText(expected.toString());
+					cashier.setExpectedTransfer(expected);
 				}
-				updateNodes();
+				cashier.updateTotal();
+				cashier = cashierService.save(cashier);
+				updateNodes(cashier);
 			});
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Entre com os dados do produto");
 			dialogStage.setScene(new Scene(vbox));
+			dialogStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -163,10 +177,10 @@ public class DashboardController implements Initializable {
 		
 	}
 	
-	private void updateNodes() {
-		BigDecimal currentValue = new BigDecimal(currentCashier.getText());
-		BigDecimal expected = new BigDecimal(expectedTransfer.getText());
-		currentCashierPlusTransfer.setText(currentValue.add(expected).toString());
+	private void updateNodes(Cashier cashier) {
+		currentCashier.setText("R$ " + cashier.getCurrentCashier().toString());
+		expectedTransfer.setText("R$ " + cashier.getExpectedTransfer().toString());
+		currentCashierPlusTransfer.setText("R$ " + cashier.getCurrentCashierPlusTransfer().toString());
 		updateTables();
 	}
 	
@@ -183,6 +197,8 @@ public class DashboardController implements Initializable {
 	
 	private void initializeNodes() {
 		initalizeTables();
+		initializeResources();
+		updateNodes(cashierService.getCompanyCashier());
 	}
 	
 	private void initalizeTables() {
@@ -193,6 +209,20 @@ public class DashboardController implements Initializable {
 		tableColumnLocationName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getLocationName()));
 		tableColumnLocationValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalValue()));
 		Utils.formatTableColumnBigDecimal(tableColumnLocationValue, 2);
+	}
+	
+	private void initializeResources() {
+		ImageView plusSign =  new ImageView(ImageManager.getImage("plusIcon"));
+		ImageView moneySign = new ImageView(ImageManager.getImage("moneyIcon"));
+		
+		plusSign.setFitHeight(23);
+		plusSign.setFitWidth(23);
+		
+		moneySign.setFitHeight(23);
+		moneySign.setFitWidth(23);
+		
+		btNewOrder.setGraphic(plusSign);
+		btUpdateValues.setGraphic(moneySign);
 	}
 
 }

@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.reis.managementControl.Entities.Product;
 import com.reis.managementControl.Entities.Enums.Category;
 import com.reis.managementControl.Gui.Listerners.AddProductListener;
-import com.reis.managementControl.Gui.Util.Alerts;
+import com.reis.managementControl.Gui.Util.ImageManager;
 import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.ProductService;
 import com.reis.managementControl.Services.Exceptions.ValidationExceptions;
@@ -27,7 +26,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -35,6 +33,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 
 @Component
 public class SearchProductFormController implements Initializable {
@@ -150,11 +149,12 @@ public class SearchProductFormController implements Initializable {
 	}
 	
 	private void initalizeNodes() {
-		initialzeTable();
+		initializeTable();
 		loadAssociatedObjects();
+		initializeResources();
 	}
 	
-	private void initialzeTable() {
+	private void initializeTable() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
 		tableColumnCategory.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getCategory()));
@@ -166,13 +166,23 @@ public class SearchProductFormController implements Initializable {
 		comboBoxCategory.setItems(obsCategory);
 	}
 	
+	private void initializeResources() {
+		ImageView search = new ImageView(ImageManager.getImage("searchIcon"));
+		ImageView save = new ImageView(ImageManager.getImage("saveIcon"));
+		
+		search.setFitHeight(16);
+		search.setFitWidth(16);
+		
+		save.setFitHeight(23);
+		save.setFitWidth(23);
+		
+		btSave.setGraphic(save);
+		btSearch.setGraphic(search);
+	}
+	
 	private void selectProduct(Product obj, ActionEvent event) {
-		Optional<ButtonType> result = Alerts.showConfirmation("Escolhendo Item",
-				"Tem certeza que deseja escolher esse Item?");
-		if (result.get() == ButtonType.OK) {
 			notifyAddProductListeners(obj);
 			Utils.currentStage(event).close();
-		}
 	}
 	
 	private void initSelectButtons() {
