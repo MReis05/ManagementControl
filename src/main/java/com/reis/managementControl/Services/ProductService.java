@@ -3,6 +3,7 @@ package com.reis.managementControl.Services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.reis.managementControl.Entities.Product;
@@ -19,7 +20,7 @@ public class ProductService {
 	}
 	
 	public List<Product> findByName(String name){
-		return repository.findByName(name);
+		return repository.findByNameContainingIgnoreCase(name);
 	}
 	
 	public Product findById(Long id) {
@@ -27,8 +28,11 @@ public class ProductService {
 		return product;
 	}
 	
-	public void save (Product product) {
-		repository.save(product);
+	public Product save (Product product) {
+		if(repository.existsByNameIgnoreCase(product.getName())) {
+			throw new DataIntegrityViolationException("Este produto já existe");
+		}
+		return repository.save(product);
 	}
 	
 	public void update(Product product) {

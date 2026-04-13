@@ -8,5 +8,6 @@ import com.reis.managementControl.Entities.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-	List<Product> findByName(String name);
+	List<Product> findByNameContainingIgnoreCase(String name);
+	boolean existsByNameIgnoreCase(String name);
 }

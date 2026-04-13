@@ -8,11 +8,13 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import com.reis.managementControl.Entities.Product;
 import com.reis.managementControl.Entities.Enums.Category;
 import com.reis.managementControl.Gui.Listerners.AddProductListener;
+import com.reis.managementControl.Gui.Util.Alerts;
 import com.reis.managementControl.Gui.Util.ImageManager;
 import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.ProductService;
@@ -25,6 +27,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -85,7 +88,7 @@ public class SearchProductFormController implements Initializable {
 	@FXML
 	public void onBtSearchAction() {
 		products.clear();
-		products.addAll(service.findByName(txtProductName.getText()));
+		products.addAll(service.findByName(txtProductName.getText().trim()));
 		updateTableView();
 	}
 	
@@ -101,6 +104,9 @@ public class SearchProductFormController implements Initializable {
 		catch(ValidationExceptions e) {
 			setErrorMessages(e.getErrors());
 		}
+		catch(DataIntegrityViolationException e) {
+			Alerts.showAlert("Aviso", null, "Já existe um produto cadastrado com este nome!", AlertType.WARNING);
+		}
 	}
 	
 	private Product getFormData(Product product) {
@@ -111,7 +117,7 @@ public class SearchProductFormController implements Initializable {
 		if(txtProductName.getText() == null || txtProductName.getText().trim().isEmpty()) {
 			exception.addError("Product Name", "Field can't be empty");
 		}
-		product.setName(txtProductName.getText());
+		product.setName(txtProductName.getText().trim());
 		if(comboBoxCategory.getValue() == null) {
 			exception.addError("Category", "You must select one Category");
 		}
