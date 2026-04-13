@@ -32,6 +32,7 @@ public class ManagementApp extends Application {
     	mainScene = new Scene(pane);
     	mainScene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
     	primaryStage.setScene(mainScene);
+    	primaryStage.getIcons().add(ImageManager.getImage("programIcon"));
         primaryStage.setTitle("Controle de Caixa e Insumos");
         primaryStage.setWidth(800);
         primaryStage.setHeight(600);

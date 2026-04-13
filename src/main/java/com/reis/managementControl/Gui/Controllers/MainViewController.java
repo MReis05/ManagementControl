@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 @Component
@@ -72,6 +73,7 @@ public class MainViewController implements Initializable {
 			contentHolder.getChildren().clear();
 			
 			contentHolder.getChildren().addAll(vbox);
+			VBox.setVgrow(vbox, Priority.ALWAYS);
 			
 			T controller = loader.getController();
 			

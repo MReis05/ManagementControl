@@ -60,18 +60,18 @@ public class DailyTotalViewController implements Initializable {
 		
 		DailyTotalDTO dto = service.sumTotalValueByDate(startDate, finalDate);
 		
-		labelTotalValue.setText(dto.getTotalValue() != null ? "R$ " + String.format("%.2f",dto.getTotalValue()) : "R$ 0.00");
-		labelCashTotalValue.setText(dto.getCashTotalValue() != null ? "R$ " + String.format("%.2f",dto.getCashTotalValue()) : "R$ 0.00");
-		labelCardTotlValue.setText(dto.getCardTotalValue() != null ? "R$ " + String.format("%.2f",dto.getCardTotalValue()) : "R$ 0.00");
-		labelPixTotalValue.setText(dto.getPixTotalValue() != null ? "R$ " + String.format("%.2f", dto.getPixTotalValue()) : "R$ 0.00");
+		labelTotalValue.setText(dto.getTotalValue() != null ? "R$ " + String.format("%.2f",dto.getTotalValue()) : "R$ 0,00");
+		labelCashTotalValue.setText(dto.getCashTotalValue() != null ? "R$ " + String.format("%.2f",dto.getCashTotalValue()) : "R$ 0,00");
+		labelCardTotlValue.setText(dto.getCardTotalValue() != null ? "R$ " + String.format("%.2f",dto.getCardTotalValue()) : "R$ 0,00");
+		labelPixTotalValue.setText(dto.getPixTotalValue() != null ? "R$ " + String.format("%.2f", dto.getPixTotalValue()) : "R$ 0,00");
 	}
 	
 	@FXML
 	private void onBtClearAction() {
-		labelTotalValue.setText("");
-		labelCashTotalValue.setText("");
-		labelCardTotlValue.setText("");
-		labelPixTotalValue.setText("");
+		labelTotalValue.setText("R$ 0,00");
+		labelCashTotalValue.setText("R$ 0,00");
+		labelCardTotlValue.setText("R$ 0,00");
+		labelPixTotalValue.setText("R$ 0,00");
 	}
 	
 	@Override

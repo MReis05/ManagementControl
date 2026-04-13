@@ -362,7 +362,7 @@ public class AddOrderFormController implements Initializable {
 	private void initRemoveButtons() {
 		tableColumnRemoveButton.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnRemoveButton.setCellFactory(param -> new TableCell<OrderItem, OrderItem>() {
-			private final Button button = new Button("remove");
+			private final Button button = new Button("remover");
 
 			@Override
 			protected void updateItem(OrderItem obj, boolean empty) {
@@ -402,6 +402,7 @@ public class AddOrderFormController implements Initializable {
 			dialogStage.setTitle("Entre com os dados do produto");
 			dialogStage.setScene(new Scene(vbox));
 			dialogStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+			dialogStage.getIcons().add(ImageManager.getImage("programIcon"));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);

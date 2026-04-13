@@ -127,6 +127,7 @@ public class DashboardController implements Initializable {
 			dialogStage.setTitle("Entre com os dados da compra");
 			dialogStage.setScene(new Scene(vbox));
 			dialogStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+			dialogStage.getIcons().add(ImageManager.getImage("programIcon"));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -158,9 +159,10 @@ public class DashboardController implements Initializable {
 			});
 			
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Entre com os dados do produto");
+			dialogStage.setTitle("Entre com os valores para atualizar");
 			dialogStage.setScene(new Scene(vbox));
 			dialogStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+			dialogStage.getIcons().add(ImageManager.getImage("programIcon"));
 			dialogStage.setResizable(false);
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);

@@ -188,7 +188,7 @@ public class SearchProductFormController implements Initializable {
 	private void initSelectButtons() {
 		tableColumnSelect.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnSelect.setCellFactory(param -> new TableCell<Product, Product>() {
-			private final Button button = new Button("Select");
+			private final Button button = new Button("Selecionar");
 
 			@Override
 			protected void updateItem(Product obj, boolean empty) {
