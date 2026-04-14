@@ -97,7 +97,7 @@ public class SearchProductFormController implements Initializable {
 		try {
 			Product product = new Product();
 			product = getFormData(product);
-			service.save(product);
+			product = service.save(product);
 			notifyAddProductListeners(product);
 			Utils.currentStage(event).close();
 		}

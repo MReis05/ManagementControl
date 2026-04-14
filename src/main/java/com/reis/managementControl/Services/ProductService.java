@@ -35,6 +35,10 @@ public class ProductService {
 		return repository.save(product);
 	}
 	
+	public boolean existsByNameIgnoreCase(String name) {
+		return repository.existsByNameIgnoreCase(name);
+	}
+	
 	public void update(Product product) {
 		repository.save(product);
 	}

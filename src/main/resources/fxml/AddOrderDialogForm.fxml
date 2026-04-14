@@ -21,8 +21,8 @@
       <GridPane styleClass="grid-form">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="427.0" minWidth="10.0" prefWidth="378.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="455.0" minWidth="10.0" prefWidth="320.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="455.0" minWidth="10.0" prefWidth="264.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="455.0" minWidth="10.0" prefWidth="226.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="455.0" minWidth="10.0" prefWidth="261.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -57,8 +57,8 @@
             <ComboBox fx:id="comboBoxLocations" editable="true" prefWidth="150.0" GridPane.columnIndex="1" />
             <ComboBox fx:id="comboBoxPaymentMethods" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <DatePicker fx:id="dpPurchaseDate" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="labelErrorLocation" textFill="#f80505" GridPane.columnIndex="2" />
-            <Label fx:id="labelErrorPaymentMethod" textFill="#f20707" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label fx:id="labelErrorLocation" styleClass="error-labels" textFill="#ff0707" GridPane.columnIndex="2" />
+            <Label fx:id="labelErrorPaymentMethod" styleClass="error-labels" textFill="#ff0707" GridPane.columnIndex="2" GridPane.rowIndex="1" />
          </children>
          <VBox.margin>
             <Insets top="10.0" />
@@ -117,12 +117,12 @@
             </Button>
             <TextField fx:id="txtUnitValue" promptText="Digite o valor Unitário do produto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="txtQuantity" promptText="Digite a quantidade de produtos" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="labelErrorUnitValue" textFill="#ee0808" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label fx:id="labelErrorUnitValue" styleClass="error-labels" textFill="#ee0808" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Label>
-            <Label fx:id="labelErrorQuantity" textFill="#f50707" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <Label fx:id="labelErrorQuantity" styleClass="error-labels" textFill="#f50707" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>

@@ -216,6 +216,10 @@
 	-fx-font-weight: bold;
 }
 
+.grid-form .error-labels{
+	-fx-font-size: 12px;
+}
+
 /* daily Total View */
 
 .card-total-value{

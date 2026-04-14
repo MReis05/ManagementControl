@@ -27,7 +27,6 @@ import com.reis.managementControl.Gui.Util.ImageManager;
 import com.reis.managementControl.Gui.Util.Utils;
 import com.reis.managementControl.Services.LocationService;
 import com.reis.managementControl.Services.OrderService;
-import com.reis.managementControl.Services.ProductService;
 import com.reis.managementControl.Services.Exceptions.ValidationExceptions;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -68,9 +67,6 @@ public class AddOrderFormController implements Initializable {
 	
 	@Autowired
 	private LocationService locationService;
-	
-	@Autowired
-	private ProductService productService;
 	
 	@Autowired
 	private OrderService orderService;
@@ -188,8 +184,6 @@ public class AddOrderFormController implements Initializable {
 			this.order = orderService.save(this.order);
 			
 			for(OrderItem i : orderItemList) {
-				Product p = i.getProduct();
-				productService.save(p);
 				i.setOrder(this.order);
 			}
 			
@@ -197,7 +191,9 @@ public class AddOrderFormController implements Initializable {
 			this.order.updateTotal();
 			this.order = orderService.save(order);
 			orderItemList.clear();
-			notifyDataChangeListeners(order.getTotalValue());
+			if(order.getPaymentMethod() == PaymentMethod.DINHEIRO || order.getPaymentMethod() == PaymentMethod.PIX) {
+				notifyDataChangeListeners(order.getTotalValue());
+			}
 			Utils.currentStage(event).close();
 		}
 		catch(ValidationExceptions e) {
