@@ -1,3 +1,13 @@
+/* Splash Screen */
+
+.splash-vbox{
+	-fx-background-color: #2B2B2B;
+}
+
+.splash-vbox .progress-indicator {
+    -fx-progress-color: white; 
+}
+
 /* mainView */
 .main-vbox{
 	-fx-background-color: #F4F6F8;

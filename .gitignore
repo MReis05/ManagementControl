@@ -34,3 +34,5 @@ build/
 
 /dados/
 *.mv.db
+
+/final-version/

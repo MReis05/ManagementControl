@@ -2,6 +2,7 @@ package com.reis.managementControl.Entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -35,7 +36,7 @@ public class Cashier implements Serializable {
 	}
 
 	public void setCurrentCashier(BigDecimal currentCashier) {
-		this.currentCashier = currentCashier;
+		this.currentCashier = currentCashier.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	public BigDecimal getExpectedTransfer() {
@@ -43,7 +44,7 @@ public class Cashier implements Serializable {
 	}
 
 	public void setExpectedTransfer(BigDecimal expectedTransfer) {
-		this.expectedTransfer = expectedTransfer;
+		this.expectedTransfer = expectedTransfer.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	public Long getId() {
@@ -55,7 +56,7 @@ public class Cashier implements Serializable {
 	}
 	
 	public void updateTotal() {
-		this.currentCashierPlusTransfer = currentCashier.add(expectedTransfer);
+		this.currentCashierPlusTransfer = currentCashier.add(expectedTransfer).setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	@Override
