@@ -282,15 +282,9 @@ public class AddOrderFormController implements Initializable {
 	}
 	
 	private void initializeOrderFields() {
-		if(order != null) {
-			System.out.println("Entrou");
-			comboBoxLocations.setValue(order.getLocation());
-			comboBoxPaymentMethods.setValue(order.getPaymentMethod());
-			updateTableView();
-		}
-		else {
-			System.out.println("Nulo");
-		}
+		comboBoxLocations.setValue(order.getLocation());
+		comboBoxPaymentMethods.setValue(order.getPaymentMethod());
+		updateTableView();
 	}
 	
 	private void updateTableView() {
@@ -391,8 +385,9 @@ public class AddOrderFormController implements Initializable {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteView));
 			loader.setControllerFactory(applicationContext::getBean);
 			VBox vbox = loader.load();
-			
+			Product obj = new Product();
 			SearchProductFormController controller = loader.getController();
+			controller.setProduct(obj);
 			controller.subscribeAddProductListener((Product product) ->{
 				this.product = product;
 				txtProductName.setText(product.getName());

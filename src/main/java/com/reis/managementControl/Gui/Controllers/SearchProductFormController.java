@@ -41,6 +41,8 @@ import javafx.scene.image.ImageView;
 @Component
 public class SearchProductFormController implements Initializable {
 	
+	private Product product;
+	
 	private AddProductListener listener;
 	
 	@Autowired
@@ -79,6 +81,9 @@ public class SearchProductFormController implements Initializable {
 	@FXML
 	private TableColumn<Product, Product> tableColumnSelect;
 	
+	@FXML
+	private TableColumn<Product, Product> tableColumnEdit;
+	
 	private ObservableList<Product> obsProduct;
 	
 	private ObservableList<Category> obsCategory;
@@ -95,11 +100,16 @@ public class SearchProductFormController implements Initializable {
 	@FXML
 	public void onBtSaveAction(ActionEvent event) {
 		try {
-			Product product = new Product();
-			product = getFormData(product);
-			product = service.save(product);
-			notifyAddProductListeners(product);
-			Utils.currentStage(event).close();
+			if (this.product == null) {
+	            this.product = new Product();
+	        }
+	        
+	        getFormData();
+	        
+	        this.product = service.save(this.product);
+	        
+	        notifyAddProductListeners(this.product);
+	        Utils.currentStage(event).close();
 		}
 		catch(ValidationExceptions e) {
 			setErrorMessages(e.getErrors());
@@ -109,7 +119,7 @@ public class SearchProductFormController implements Initializable {
 		}
 	}
 	
-	private Product getFormData(Product product) {
+	private void getFormData() {
 		labelErrorProductName.setText("");
 		
 		ValidationExceptions exception = new ValidationExceptions("Validation Error");
@@ -117,19 +127,17 @@ public class SearchProductFormController implements Initializable {
 		if(txtProductName.getText() == null || txtProductName.getText().trim().isEmpty()) {
 			exception.addError("Product Name", "Field can't be empty");
 		}
-		product.setName(txtProductName.getText().trim());
+		this.product.setName(txtProductName.getText().trim());
 		if(comboBoxCategory.getValue() == null) {
 			exception.addError("Category", "You must select one Category");
 		}
 		else {
-			product.setCategory(comboBoxCategory.getValue());
+			this.product.setCategory(comboBoxCategory.getValue());
 		}
 		
 		if(!exception.getErrors().isEmpty()) {
 			throw exception;
 		}
-		
-		return product;
 	}
 	
 	private void notifyAddProductListeners(Product product) {
@@ -147,6 +155,7 @@ public class SearchProductFormController implements Initializable {
 		obsProduct = FXCollections.observableArrayList(products);
 		tableViewProduct.setItems(obsProduct);
 		initSelectButtons();
+		initEditButtons();
 	}
 	
 	@Override
@@ -191,6 +200,12 @@ public class SearchProductFormController implements Initializable {
 			Utils.currentStage(event).close();
 	}
 	
+	private void editProduct(Product obj) {
+		this.product = obj;
+		txtProductName.setText(obj.getName());
+		comboBoxCategory.setValue(obj.getCategory());
+	}
+	
 	private void initSelectButtons() {
 		tableColumnSelect.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
 		tableColumnSelect.setCellFactory(param -> new TableCell<Product, Product>() {
@@ -209,10 +224,36 @@ public class SearchProductFormController implements Initializable {
 		});
 	}
 	
+	private void initEditButtons() {
+		tableColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnEdit.setCellFactory(param -> new TableCell<Product, Product>() {
+			private final Button button = new Button("Editar");
+
+			@Override
+			protected void updateItem(Product obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(event -> editProduct(obj));
+			}
+		});
+	}
+	
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> keys = errors.keySet();
 		
 		labelErrorProductName.setText(keys.contains("Product Name") ? errors.get("Product Name"): "");
 		labelErrorCategory.setText(keys.contains("Category") ? errors.get("Category") : "");
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 }
