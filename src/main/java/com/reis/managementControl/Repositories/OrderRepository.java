@@ -42,9 +42,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
 			+ "FROM Order o WHERE o.date BETWEEN :date AND :finalDate AND o.location.name IN :names "
 			+ "GROUP By o.location.name")
-	List<TotalPerLocationDTO> findByDateBetweenAndNames(LocalDate date, LocalDate finalData, List<String> names);
+	List<TotalPerLocationDTO> findByDateBetweenAndNames(LocalDate date, LocalDate finalDate, List<String> names);
 	
 	@Query("SELECT new com.reis.managementControl.Entities.DTO.TotalPerLocationDTO(o.location.name, SUM(o.totalValue))"
 			+ "FROM Order o WHERE o.date BETWEEN :monday AND :sunday GROUP By o.location.name ORDER BY SUM(o.totalValue) DESC")
 	List<TotalPerLocationDTO> findByDateBetweenWeekly(LocalDate monday, LocalDate sunday, Pageable pageable);
+	
+	List<Order> findOrderByDate(LocalDate date);
+	
+	List<Order> findOrderByDateBetween(LocalDate date, LocalDate finalDate);
 }

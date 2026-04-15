@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -13,6 +11,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.reis.managementControl.Entities.Location;
@@ -54,6 +53,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 @Component
+@Scope("prototype")
 public class AddOrderFormController implements Initializable {
 	
 	@Autowired
@@ -140,9 +140,6 @@ public class AddOrderFormController implements Initializable {
 	
 	private ObservableList<OrderItem> obsOrderItem;
 	
-	private List<OrderItem> orderItemList = new ArrayList<>();
-	
-	
 	@FXML
 	public void onBtSearchAction(ActionEvent event) {
 		Stage stage = Utils.currentStage(event);
@@ -160,7 +157,7 @@ public class AddOrderFormController implements Initializable {
 			Product product = new Product();
 			OrderItem orderItem = new OrderItem();
 			orderItem = getFormData(product, orderItem);
-			orderItemList.add(orderItem);
+			this.order.getItems().add(orderItem);
 			updateTableView();
 			txtProductName.clear();
 			txtQuantity.clear();
@@ -176,21 +173,18 @@ public class AddOrderFormController implements Initializable {
 	@FXML
 	public void onBtSaveOrderAction(ActionEvent event) {
 		try {
-			if(orderItemList.size() == 0) {
+			if(this.order.getItems().size() == 0) {
 				Alerts.showAlert("Aviso", null, "Adicione pelo menos um item antes de salvar o pedido.", AlertType.WARNING);
 				return;
 			}
 			this.order = getFormOrderData(this.order);
-			this.order = orderService.save(this.order);
 			
-			for(OrderItem i : orderItemList) {
+			for(OrderItem i : this.order.getItems()) {
 				i.setOrder(this.order);
 			}
 			
-			this.order.getItems().addAll(orderItemList);
 			this.order.updateTotal();
 			this.order = orderService.save(order);
-			orderItemList.clear();
 			if(order.getPaymentMethod() == PaymentMethod.DINHEIRO || order.getPaymentMethod() == PaymentMethod.PIX) {
 				notifyDataChangeListeners(order.getTotalValue());
 			}
@@ -203,7 +197,6 @@ public class AddOrderFormController implements Initializable {
 	
 	@FXML
 	public void onBtCancelAction(ActionEvent event) {
-		orderItemList.clear();
 		Utils.currentStage(event).close();
 	}
 
@@ -286,11 +279,22 @@ public class AddOrderFormController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initializeNodes();
-		
+	}
+	
+	private void initializeOrderFields() {
+		if(order != null) {
+			System.out.println("Entrou");
+			comboBoxLocations.setValue(order.getLocation());
+			comboBoxPaymentMethods.setValue(order.getPaymentMethod());
+			updateTableView();
+		}
+		else {
+			System.out.println("Nulo");
+		}
 	}
 	
 	private void updateTableView() {
-		obsOrderItem = FXCollections.observableArrayList(orderItemList);
+		obsOrderItem = FXCollections.observableArrayList(this.order.getItems());
 		tableViewOrderItem.setItems(obsOrderItem);
 		initRemoveButtons();
 		
@@ -351,7 +355,7 @@ public class AddOrderFormController implements Initializable {
 				"Tem certeza que deseja apagar o Item?");
 		if (result.get() == ButtonType.OK) {
 			obsOrderItem.remove(obj);
-			orderItemList.remove(obj);
+			this.order.getItems().remove(obj);
 		}
 	}
 	
@@ -415,5 +419,6 @@ public class AddOrderFormController implements Initializable {
 
 	public void setOrder(Order order) {
 		this.order = order;
+		initializeOrderFields();
 	}
 }

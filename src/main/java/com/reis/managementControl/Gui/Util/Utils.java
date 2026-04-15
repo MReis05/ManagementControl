@@ -1,10 +1,8 @@
 package com.reis.managementControl.Gui.Util;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
 
 import com.reis.managementControl.Entities.Location;
@@ -40,23 +38,23 @@ public class Utils {
 		}
 	}
 
-	public static <T> void formatTableColumnDate(TableColumn<T, Date> tableColumn, String format) {
-		tableColumn.setCellFactory(column -> {
-			TableCell<T, Date> cell = new TableCell<T, Date>() {
-				private SimpleDateFormat sdf = new SimpleDateFormat(format);
+	public static <T> void formatTableColumnDate(TableColumn<T, LocalDate> tableColumn, String format) {
+	    tableColumn.setCellFactory(column -> {
+	        TableCell<T, LocalDate> cell = new TableCell<T, LocalDate>() {
+	            private DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
 
-				@Override
-				protected void updateItem(Date item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-					} else {
-						setText(sdf.format(item));
-					}
-				}
-			};
-			return cell;
-		});
+	            @Override
+	            protected void updateItem(LocalDate item, boolean empty) {
+	                super.updateItem(item, empty);
+	                if (empty || item == null) {
+	                    setText(null);
+	                } else {
+	                    setText(dtf.format(item));
+	                }
+	            }
+	        };
+	        return cell;
+	    });
 	}
 
 	public static <T> void formatTableColumnDouble(TableColumn<T, Double> tableColumn, int decimalPlaces) {

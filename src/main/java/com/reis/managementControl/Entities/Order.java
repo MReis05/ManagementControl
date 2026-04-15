@@ -12,6 +12,7 @@ import com.reis.managementControl.Entities.Enums.PaymentMethod;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,7 +36,7 @@ public class Order implements Serializable {
 	@ManyToOne
 	private Location location;
 	
-	@OneToMany(mappedBy = "id.order", cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "id.order", fetch = FetchType.EAGER, cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> items = new ArrayList<>();
 	
 	public Order() {

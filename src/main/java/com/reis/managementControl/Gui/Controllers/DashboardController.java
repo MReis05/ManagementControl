@@ -62,6 +62,9 @@ public class DashboardController implements Initializable {
 	private Button btNewOrder;
 	
 	@FXML
+	private Button btOrderManagement;
+	
+	@FXML
 	private Label currentCashier;
 	
 	@FXML
@@ -103,6 +106,12 @@ public class DashboardController implements Initializable {
 	public void onBtUpdateValuesAction(ActionEvent event) {
 		Stage parentStage = Utils.currentStage(event);
 		dialogUpdateValues("/fxml/UpdateValuesFormView.fxml", parentStage);
+	}
+	
+	@FXML
+	public void onBtOrderManagementAction(ActionEvent event) {
+		Stage parentStage = Utils.currentStage(event);
+		dialogOrderManagement("/fxml/OrderManagementView.fxml", parentStage);
 	}
 	
 	public void dialogForm(String absoluteView, Stage parentStage) {
@@ -173,6 +182,37 @@ public class DashboardController implements Initializable {
 		}
 	}
 	
+	public void dialogOrderManagement(String absoluteView, Stage parentStage) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteView));
+			loader.setControllerFactory(applicationContext::getBean);
+			VBox vbox = loader.load();
+			
+			OrderManagementViewController controller = loader.getController();
+			controller.subscribeUpdateValuesListener((BigDecimal totalValue) ->{
+				Cashier cashier = cashierService.getCompanyCashier();
+				BigDecimal current = cashier.getCurrentCashier();
+				cashier.setCurrentCashier(current.subtract(totalValue));
+				cashier.updateTotal();
+				cashier = cashierService.save(cashier);
+				updateNodes(cashier);
+			});
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Pesquise o pedido para atualizar ou excluir");
+			dialogStage.setScene(new Scene(vbox));
+			dialogStage.getScene().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+			dialogStage.getIcons().add(ImageManager.getImage("programIcon"));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initializeNodes();
@@ -216,6 +256,7 @@ public class DashboardController implements Initializable {
 	private void initializeResources() {
 		ImageView plusSign =  new ImageView(ImageManager.getImage("plusIcon"));
 		ImageView moneySign = new ImageView(ImageManager.getImage("moneyIcon"));
+		ImageView editSign = new ImageView(ImageManager.getImage("editIcon"));
 		
 		plusSign.setFitHeight(23);
 		plusSign.setFitWidth(23);
@@ -223,8 +264,12 @@ public class DashboardController implements Initializable {
 		moneySign.setFitHeight(23);
 		moneySign.setFitWidth(23);
 		
+		editSign.setFitHeight(23);
+		editSign.setFitWidth(23);
+		
 		btNewOrder.setGraphic(plusSign);
 		btUpdateValues.setGraphic(moneySign);
+		btOrderManagement.setGraphic(editSign);
 	}
 
 }

@@ -24,6 +24,15 @@ public class OrderService {
 		return repository.findAll();
 	}
 	
+	public List<Order> findOrderByDate(LocalDate date, LocalDate finalDate){
+		if(finalDate == null) {
+			return repository.findOrderByDate(date);
+		}
+		else {
+			return repository.findOrderByDateBetween(date, finalDate);
+		}
+	}
+	
 	public DailyTotalDTO sumTotalValueByDate(LocalDate date, LocalDate finalDate){
 		DailyTotalDTO dto = new DailyTotalDTO();
 		if(finalDate == null) {

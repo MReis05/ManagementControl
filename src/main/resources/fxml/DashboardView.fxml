@@ -109,6 +109,14 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Button>
+            <Button fx:id="btOrderManagement" mnemonicParsing="false" onAction="#onBtOrderManagementAction" styleClass="settings-button" text="Deletar ou atualizar pedido" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets left="5.0" top="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Button>
          </children>
          <VBox.margin>
             <Insets bottom="10.0" top="60.0" />
