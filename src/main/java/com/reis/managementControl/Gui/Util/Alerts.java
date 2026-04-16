@@ -24,6 +24,8 @@ public class Alerts {
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(content);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		stage.getIcons().add(ImageManager.getImage("programIcon"));
 		return alert.showAndWait();
 	}
 }

@@ -186,7 +186,7 @@ public class AddOrderFormController implements Initializable {
 			this.order.updateTotal();
 			this.order = orderService.save(order);
 			if(order.getPaymentMethod() == PaymentMethod.DINHEIRO || order.getPaymentMethod() == PaymentMethod.PIX) {
-				notifyDataChangeListeners(order.getTotalValue());
+				notifyDataChangeListeners(order.getTotalValue(), order.getLocation().getName());
 			}
 			Utils.currentStage(event).close();
 		}
@@ -266,9 +266,9 @@ public class AddOrderFormController implements Initializable {
 		return order;
 	}
 	
-	private void notifyDataChangeListeners(BigDecimal totalValue) {
+	private void notifyDataChangeListeners(BigDecimal totalValue, String source) {
 		if(listener != null) {
-			listener.updateValues(totalValue);
+			listener.updateValues(totalValue, source);
 		}
 	}
 	
@@ -284,6 +284,7 @@ public class AddOrderFormController implements Initializable {
 	private void initializeOrderFields() {
 		comboBoxLocations.setValue(order.getLocation());
 		comboBoxPaymentMethods.setValue(order.getPaymentMethod());
+		dpPurchaseDate.setValue(order.getDate());
 		updateTableView();
 	}
 	

@@ -4,5 +4,5 @@ import java.math.BigDecimal;
 
 public interface DataChangeListener {
 
-	void updateValues(BigDecimal totalValue);
+	void updateValues(BigDecimal totalValue, String source);
 }

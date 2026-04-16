@@ -2,9 +2,11 @@ package com.reis.managementControl.Entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.reis.managementControl.Entities.PK.OrderItemPK;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -17,7 +19,10 @@ public class OrderItem implements Serializable {
 	@EmbeddedId
 	private OrderItemPK id = new OrderItemPK();
 	
+	@Column(precision = 10, scale = 3)
 	private BigDecimal quantity;
+	
+	@Column(precision = 10, scale = 3)
 	private BigDecimal unitValue;
 	
 	public OrderItem() {
@@ -52,7 +57,7 @@ public class OrderItem implements Serializable {
 	}
 
 	public void setQuantity(BigDecimal quantity) {
-		this.quantity = quantity;
+		this.quantity = quantity.setScale(3, RoundingMode.HALF_EVEN);
 	}
 
 	public BigDecimal getUnitValue() {
@@ -60,10 +65,10 @@ public class OrderItem implements Serializable {
 	}
 
 	public void setUnitValue(BigDecimal unitValue) {
-		this.unitValue = unitValue;
+		this.unitValue = unitValue.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	public BigDecimal getTotalValue() {
-		return unitValue.multiply(quantity);
+		return unitValue.multiply(quantity).setScale(2, RoundingMode.HALF_EVEN);
 	}
 }

@@ -23,6 +23,7 @@ public class ImageManager {
 			imageCache.put("searchIcon", new Image(ImageManager.class.getResourceAsStream(imagesPath + "search_icon.png")));
 			imageCache.put("programIcon", new Image(ImageManager.class.getResourceAsStream(imagesPath + "program_icon.png")));
 			imageCache.put("editIcon", new Image(ImageManager.class.getResourceAsStream(imagesPath + "edit_icon.png")));
+			imageCache.put("transactionIcon", new Image(ImageManager.class.getResourceAsStream(imagesPath + "transaction_icon.png")));
 		}
 		catch (Exception e) {
 			e.printStackTrace();

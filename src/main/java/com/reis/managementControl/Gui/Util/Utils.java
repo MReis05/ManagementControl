@@ -2,6 +2,7 @@ package com.reis.managementControl.Gui.Util;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -56,6 +57,26 @@ public class Utils {
 	        return cell;
 	    });
 	}
+	
+	public static <T> void formatTableColumnDateTime(TableColumn<T, LocalDateTime> tableColumn, String format) {
+	    tableColumn.setCellFactory(column -> {
+	        TableCell<T, LocalDateTime> cell = new TableCell<T, LocalDateTime>() {
+	            private DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
+
+	            @Override
+	            protected void updateItem(LocalDateTime item, boolean empty) {
+	                super.updateItem(item, empty);
+	                if (empty || item == null) {
+	                    setText(null);
+	                } else {
+	                    setText(dtf.format(item));
+	                }
+	            }
+	        };
+	        return cell;
+	    });
+	}
+
 
 	public static <T> void formatTableColumnDouble(TableColumn<T, Double> tableColumn, int decimalPlaces) {
 		tableColumn.setCellFactory(column -> {

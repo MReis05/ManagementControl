@@ -3,10 +3,14 @@ package com.reis.managementControl.Entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,6 +23,9 @@ public class Cashier implements Serializable {
 	private BigDecimal currentCashier;
 	private BigDecimal expectedTransfer;
 	private BigDecimal currentCashierPlusTransfer;
+	
+	@OneToMany(mappedBy = "cashier", fetch = FetchType.EAGER, cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
+	private List<Transaction> transactions = new ArrayList<>();
 	
 	public Cashier() {
 	}
@@ -49,6 +56,10 @@ public class Cashier implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
 	}
 
 	public BigDecimal getCurrentCashierPlusTransfer() {

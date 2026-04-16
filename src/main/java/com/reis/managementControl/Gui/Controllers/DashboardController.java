@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.reis.managementControl.Entities.Cashier;
 import com.reis.managementControl.Entities.Order;
+import com.reis.managementControl.Entities.Transaction;
 import com.reis.managementControl.Entities.DTO.OrderItemHistoryDTO;
 import com.reis.managementControl.Entities.DTO.TotalPerLocationDTO;
 import com.reis.managementControl.Gui.Util.ImageManager;
@@ -123,10 +125,18 @@ public class DashboardController implements Initializable {
 			AddOrderFormController controller = loader.getController();
 			Order order = new Order();
 			controller.setOrder(order);
-			controller.subscribeDataChangeListener((BigDecimal totalValue) ->{
+			controller.subscribeDataChangeListener((BigDecimal totalValue, String source) ->{
 				Cashier cashier = cashierService.getCompanyCashier();
+				Transaction transaction = new Transaction();
+				transaction.setCashier(cashier);
+				transaction.setSource(source);
+				transaction.setCurrentCashier(cashier.getCurrentCashier());
+				transaction.setTransactionTime(LocalDateTime.now());
+				transaction.setTransactionValue(totalValue.negate());
 				BigDecimal currentValueMinusOrder = cashier.getCurrentCashier().subtract(totalValue);
 				cashier.setCurrentCashier(currentValueMinusOrder);
+				transaction.setNewValue(cashier.getCurrentCashier());
+				cashier.getTransactions().add(transaction);
 				cashier.updateTotal();
 				cashier = cashierService.save(cashier);
 				updateNodes(cashier);
@@ -157,7 +167,16 @@ public class DashboardController implements Initializable {
 			controller.subscribeUpdateValuesListener((BigDecimal current, BigDecimal expected) ->{
 				Cashier cashier = cashierService.getCompanyCashier();
 				if(current.compareTo(BigDecimal.ZERO) > 0) {
+					Transaction transaction = new Transaction();
+					transaction.setCashier(cashier);
+					transaction.setCurrentCashier(cashier.getCurrentCashier());
+					transaction.setSource("Usuário");
+					transaction.setTransactionTime(LocalDateTime.now());
+					BigDecimal transactionValue = current.subtract(cashier.getCurrentCashier());
+					transaction.setTransactionValue(transactionValue);
 					cashier.setCurrentCashier(current);
+					transaction.setNewValue(cashier.getCurrentCashier());
+					cashier.getTransactions().add(transaction);
 				}
 				if(expected.compareTo(BigDecimal.ZERO) > 0) {
 					cashier.setExpectedTransfer(expected);
@@ -189,10 +208,18 @@ public class DashboardController implements Initializable {
 			VBox vbox = loader.load();
 			
 			OrderManagementViewController controller = loader.getController();
-			controller.subscribeUpdateValuesListener((BigDecimal totalValue) ->{
+			controller.subscribeUpdateValuesListener((BigDecimal totalValue, String source) ->{
 				Cashier cashier = cashierService.getCompanyCashier();
+				Transaction transaction = new Transaction();
+				transaction.setCashier(cashier);
+				transaction.setCurrentCashier(cashier.getCurrentCashier());
+				transaction.setSource(source);
+				transaction.setTransactionValue(totalValue.negate());
+				transaction.setTransactionTime(LocalDateTime.now());
 				BigDecimal current = cashier.getCurrentCashier();
 				cashier.setCurrentCashier(current.subtract(totalValue));
+				transaction.setNewValue(cashier.getCurrentCashier());
+				cashier.getTransactions().add(transaction);
 				cashier.updateTotal();
 				cashier = cashierService.save(cashier);
 				updateNodes(cashier);

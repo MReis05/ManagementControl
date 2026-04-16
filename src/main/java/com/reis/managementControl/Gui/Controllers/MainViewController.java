@@ -39,6 +39,9 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	private Button btOrderItemHistory;
+	
+	@FXML
+	private Button btTransaction;
 		
 	@FXML
 	public void onBDashboardAction() {
@@ -61,6 +64,12 @@ public class MainViewController implements Initializable {
 	@FXML
 	public void onBtOrderHistoryAction() {
 		loadView("/fxml/OrderItemHistoryView.fxml", (OrderItemHistoryViewController controller) ->{
+		});
+	}
+	
+	@FXML
+	private void onBtTransactionAction() {
+		loadView("/fxml/TransactionsView.fxml", (TransactionsViewController controller) ->{
 		});
 	}
 	
@@ -96,6 +105,7 @@ public class MainViewController implements Initializable {
 		ImageView dailyTotal = new ImageView(ImageManager.getImage("dailyTotal"));
 		ImageView location = new ImageView(ImageManager.getImage("location"));
 		ImageView orderItemHistory = new ImageView(ImageManager.getImage("orderItemHistory"));
+		ImageView transaction = new ImageView(ImageManager.getImage("transactionIcon"));
 		
 		dashboard.setFitHeight(32);
 		dashboard.setFitWidth(32);
@@ -109,10 +119,14 @@ public class MainViewController implements Initializable {
 		orderItemHistory.setFitHeight(32);
 		orderItemHistory.setFitWidth(32);
 		
+		transaction.setFitHeight(32);
+		transaction.setFitWidth(32);
+		
 		btDashboard.setGraphic(dashboard);
 		btDailyTotal.setGraphic(dailyTotal);
 		btTotalPerLocation.setGraphic(location);
 		btOrderItemHistory.setGraphic(orderItemHistory);
+		btTransaction.setGraphic(transaction);
 	}
 
 }

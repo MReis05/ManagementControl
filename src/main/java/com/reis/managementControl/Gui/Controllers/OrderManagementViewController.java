@@ -106,9 +106,9 @@ public class OrderManagementViewController implements Initializable {
 		updateTableView();
 	}
 	
-	private void notifyUpdateValuesListeners(BigDecimal totalValue) {
+	private void notifyUpdateValuesListeners(BigDecimal totalValue, String source) {
 		if(listener != null) {
-			listener.updateValues(totalValue);
+			listener.updateValues(totalValue, source);
 		}
 	}
 	
@@ -158,7 +158,7 @@ public class OrderManagementViewController implements Initializable {
 					"Tem certeza que deseja apagar o Pedido?");
 			if(result.get() == ButtonType.OK) {
 				service.delete(obj);
-				notifyUpdateValuesListeners(obj.getTotalValue().negate());
+				notifyUpdateValuesListeners(obj.getTotalValue().negate(), "Deleção de Pedido");
 				Utils.currentStage(event).close();
 			}
 		}
@@ -188,7 +188,13 @@ public class OrderManagementViewController implements Initializable {
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
 			BigDecimal newValue = obj.getTotalValue();
-			notifyUpdateValuesListeners(newValue.subtract(currentValue));
+			BigDecimal valueDifference = newValue.subtract(currentValue);
+			if(valueDifference.compareTo(BigDecimal.ZERO) > 0) {
+				notifyUpdateValuesListeners(valueDifference, obj.getLocation().getName());
+			}
+			else {
+				notifyUpdateValuesListeners(valueDifference, "Deleção de Item");
+			}
 			parentStage.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
