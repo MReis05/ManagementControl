@@ -102,6 +102,9 @@ public class AddOrderFormController implements Initializable {
 	private Button btSearch;
 	
 	@FXML
+	private Label labelTotalValue;
+	
+	@FXML
 	private Label labelErrorUnitValue;
 	
 	@FXML
@@ -140,6 +143,8 @@ public class AddOrderFormController implements Initializable {
 	
 	private ObservableList<OrderItem> obsOrderItem;
 	
+	private BigDecimal totalValue = BigDecimal.ZERO;
+	
 	@FXML
 	public void onBtSearchAction(ActionEvent event) {
 		Stage stage = Utils.currentStage(event);
@@ -157,6 +162,7 @@ public class AddOrderFormController implements Initializable {
 			Product product = new Product();
 			OrderItem orderItem = new OrderItem();
 			orderItem = getFormData(product, orderItem);
+			totalValue = totalValue.add(orderItem.getTotalValue());
 			this.order.getItems().add(orderItem);
 			updateTableView();
 			txtProductName.clear();
@@ -212,7 +218,7 @@ public class AddOrderFormController implements Initializable {
 			exceptions.addError("Quantity", "Field can't be empty");
 		}
 		else {
-			orderItem.setQuantity(new BigDecimal (txtQuantity.getText()));
+			orderItem.setQuantity(new BigDecimal(txtQuantity.getText()));
 		}
 		if(txtUnitValue.getText() == null || txtUnitValue.getText().trim().isEmpty()) {
 			exceptions.addError("Unit Value", "Field can't be empty");
@@ -285,12 +291,16 @@ public class AddOrderFormController implements Initializable {
 		comboBoxLocations.setValue(order.getLocation());
 		comboBoxPaymentMethods.setValue(order.getPaymentMethod());
 		dpPurchaseDate.setValue(order.getDate());
+		if(order.getTotalValue() != null) {
+			totalValue = order.getTotalValue();
+		}
 		updateTableView();
 	}
 	
 	private void updateTableView() {
 		obsOrderItem = FXCollections.observableArrayList(this.order.getItems());
 		tableViewOrderItem.setItems(obsOrderItem);
+		labelTotalValue.setText(totalValue.toString());
 		initRemoveButtons();
 		
 	}
@@ -349,6 +359,8 @@ public class AddOrderFormController implements Initializable {
 		Optional<ButtonType> result = Alerts.showConfirmation("Removendo Item",
 				"Tem certeza que deseja apagar o Item?");
 		if (result.get() == ButtonType.OK) {
+			totalValue = totalValue.subtract(obj.getTotalValue());
+			updateTableView();
 			obsOrderItem.remove(obj);
 			this.order.getItems().remove(obj);
 		}

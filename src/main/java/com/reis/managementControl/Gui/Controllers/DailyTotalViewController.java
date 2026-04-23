@@ -68,6 +68,8 @@ public class DailyTotalViewController implements Initializable {
 	
 	@FXML
 	private void onBtClearAction() {
+		dpDate.getEditor().clear();
+		dpFinalDate.getEditor().clear();
 		labelTotalValue.setText("R$ 0,00");
 		labelCashTotalValue.setText("R$ 0,00");
 		labelCardTotlValue.setText("R$ 0,00");

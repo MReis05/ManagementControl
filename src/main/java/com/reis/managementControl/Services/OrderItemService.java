@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.reis.managementControl.Entities.OrderItem;
 import com.reis.managementControl.Entities.DTO.OrderItemHistoryDTO;
+import com.reis.managementControl.Entities.Enums.Category;
 import com.reis.managementControl.Entities.PK.OrderItemPK;
 import com.reis.managementControl.Repositories.OrderItemRepository;
 
@@ -23,8 +24,11 @@ public class OrderItemService {
 		return repository.findAll();
 	}
 	
-	public List<OrderItemHistoryDTO> findByDate(LocalDate date, LocalDate finalDate, List<String> names){
+	public List<OrderItemHistoryDTO> findByDate(LocalDate date, LocalDate finalDate, List<String> names, Category category){
 		if(finalDate == null) {
+			if(category != null) {
+				return repository.findByDateAndCategory(date, category);
+			}
 			if(names.size() > 0) {
 				return repository.findByDateAndNames(date, names);
 			}
@@ -33,6 +37,9 @@ public class OrderItemService {
 			}
 		}
 		else {
+			if(category != null) {
+				return repository.findByDateBetweenAndCategory(date, finalDate, category);
+			}
 			if(names.size() > 0) {
 				return repository.findByDateBetweenAndNames(date, finalDate, names);
 			}

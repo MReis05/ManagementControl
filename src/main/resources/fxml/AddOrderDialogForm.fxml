@@ -129,18 +129,41 @@
             </Label>
          </children>
       </GridPane>
-      <Button fx:id="btAddProduct" mnemonicParsing="false" onAction="#onBtAddProductAction" text="Adicionar produto">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
+      <HBox>
          <VBox.margin>
-            <Insets bottom="10.0" left="450.0" top="10.0" />
+            <Insets left="450.0" top="10.0" />
          </VBox.margin>
-         <styleClass>
-            <String fx:value="new-button" />
-            <String fx:value="save-buttons" />
-         </styleClass>
-      </Button>
+         <children>
+            <Button fx:id="btAddProduct" mnemonicParsing="false" onAction="#onBtAddProductAction" text="Adicionar produto">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="new-button" />
+                  <String fx:value="save-buttons" />
+               </styleClass>
+               <HBox.margin>
+                  <Insets bottom="10.0" />
+               </HBox.margin>
+            </Button>
+            <Label text="Total: R$">
+               <HBox.margin>
+                  <Insets left="80.0" right="5.0" top="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="Lato Regular" size="13.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelTotalValue" alignment="CENTER_RIGHT">
+               <HBox.margin>
+                  <Insets right="10.0" top="20.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="Lato Bold" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
       <TableView fx:id="tableViewOrderItem" prefHeight="191.0" prefWidth="612.0">
         <columns>
           <TableColumn fx:id="tableColumnName" prefWidth="130.0" text="Nome" />

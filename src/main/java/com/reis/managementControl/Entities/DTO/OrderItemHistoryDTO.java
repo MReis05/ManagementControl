@@ -1,6 +1,7 @@
 package com.reis.managementControl.Entities.DTO;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.reis.managementControl.Entities.Enums.Category;
 
@@ -8,15 +9,17 @@ public class OrderItemHistoryDTO {
 
 	private String name;
 	private BigDecimal totalValue;
+	private BigDecimal averageUnitValue;
 	private Category category;
 	
 	public OrderItemHistoryDTO() {
 	}
 
-	public OrderItemHistoryDTO(String name, BigDecimal totalValue, Category category) {
+	public OrderItemHistoryDTO(String name, BigDecimal totalValue, Double averageUnitValue, Category category) {
 		super();
 		this.name = name;
 		this.totalValue = totalValue;
+		this.averageUnitValue = (averageUnitValue != null) ? BigDecimal.valueOf(averageUnitValue).setScale(2, RoundingMode.HALF_EVEN) : BigDecimal.ZERO;
 		this.category = category;
 	}
 
@@ -34,6 +37,14 @@ public class OrderItemHistoryDTO {
 
 	public void setTotalValue(BigDecimal totalValue) {
 		this.totalValue = totalValue;
+	}
+
+	public BigDecimal getaverageUnitValue() {
+		return averageUnitValue;
+	}
+
+	public void setaverageUnitValue(BigDecimal averageUnitValue) {
+		this.averageUnitValue = averageUnitValue;
 	}
 
 	public Category getCategory() {

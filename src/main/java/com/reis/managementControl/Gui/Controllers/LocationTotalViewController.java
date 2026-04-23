@@ -65,7 +65,7 @@ public class LocationTotalViewController implements Initializable {
 	private void onBtSearchAction() {
 		List<String> names = new ArrayList<>();
 		if(txtProductNames.getText() != null && !txtProductNames.getText().trim().isEmpty()) {
-			names.addAll(Arrays.asList(txtProductNames.getText().split("//s*,s*//")));
+			names.addAll(Arrays.asList(txtProductNames.getText().split("\\s*,\\s*")));
 		}
 		LocalDate startDate = dpDate.getValue();
 		LocalDate finalDate = dpFinalDate.getValue();
@@ -82,6 +82,9 @@ public class LocationTotalViewController implements Initializable {
 	
 	@FXML
 	private void onBtClearAction() {
+		dpDate.getEditor().clear();
+		dpFinalDate.getEditor().clear();
+		txtProductNames.clear();
 		obsLocationTotalValue.clear();
 		updateTableView();
 		

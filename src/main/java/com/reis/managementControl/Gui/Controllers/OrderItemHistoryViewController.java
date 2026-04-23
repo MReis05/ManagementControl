@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -46,6 +47,9 @@ public class OrderItemHistoryViewController implements Initializable {
 	private TextField txtProductName;
 	
 	@FXML
+	private ComboBox<Category> comboBoxcategory;
+	
+	@FXML
 	private Button btSearch;
 	
 	@FXML
@@ -58,12 +62,17 @@ public class OrderItemHistoryViewController implements Initializable {
 	private TableColumn<OrderItemHistoryDTO, String> tableColumnProductName;
 	
 	@FXML
+	private TableColumn<OrderItemHistoryDTO, BigDecimal> tableColumnUnitValue;
+	
+	@FXML
 	private TableColumn<OrderItemHistoryDTO, BigDecimal> tableColumnTotalValue;
 	
 	@FXML
 	private TableColumn<OrderItemHistoryDTO, Category> tableColumnCategory;
 	
 	private ObservableList<OrderItemHistoryDTO> obsOrderItemHistory;
+	
+	private ObservableList<Category> obsCategory;
 	
 	@FXML
 	private void onBtSearchAction() {
@@ -73,6 +82,7 @@ public class OrderItemHistoryViewController implements Initializable {
 		}
 		LocalDate startDate = dpDate.getValue();
 		LocalDate finalDate = dpFinalDate.getValue();
+		Category category = comboBoxcategory.getValue();
 		
 		
 		if(dpFinalDate.getEditor().getText().trim().isEmpty()) {
@@ -80,7 +90,7 @@ public class OrderItemHistoryViewController implements Initializable {
 			dpFinalDate.setValue(null);
 		}
 		
-		obsOrderItemHistory = FXCollections.observableArrayList(service.findByDate(startDate, finalDate, names));
+		obsOrderItemHistory = FXCollections.observableArrayList(service.findByDate(startDate, finalDate, names, category));
 		
 		updateTableView();
 		
@@ -88,6 +98,10 @@ public class OrderItemHistoryViewController implements Initializable {
 	
 	@FXML
 	private void onBtClearAction() {
+		dpDate.getEditor().clear();
+		dpFinalDate.getEditor().clear();
+		comboBoxcategory.getSelectionModel().clearSelection();
+		txtProductName.clear();
 		obsOrderItemHistory.clear();
 		updateTableView();
 	}
@@ -106,10 +120,15 @@ public class OrderItemHistoryViewController implements Initializable {
 		Utils.formatDatePicker(dpFinalDate, "dd/MM/yyyy");
 		initializeTable();
 		initalizeResources();
+		
+		obsCategory = FXCollections.observableArrayList(Category.values());
+		comboBoxcategory.setItems(obsCategory);
 	}
 	
 	private void initializeTable() {
 		tableColumnProductName.setCellValueFactory(cellData -> new ReadOnlyStringWrapper(cellData.getValue().getName()));
+		tableColumnUnitValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getaverageUnitValue()));
+		Utils.formatTableColumnBigDecimal(tableColumnUnitValue, 2);
 		tableColumnTotalValue.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getTotalValue()));
 		Utils.formatTableColumnBigDecimal(tableColumnTotalValue, 2);
 		tableColumnCategory.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getCategory()));
