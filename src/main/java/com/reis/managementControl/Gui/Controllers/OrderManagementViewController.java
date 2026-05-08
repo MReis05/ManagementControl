@@ -29,6 +29,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
@@ -189,15 +190,19 @@ public class OrderManagementViewController implements Initializable {
 			dialogStage.showAndWait();
 			BigDecimal newValue = obj.getTotalValue();
 			BigDecimal valueDifference = newValue.subtract(currentValue);
-			if(valueDifference.compareTo(BigDecimal.ZERO) > 0) {
-				notifyUpdateValuesListeners(valueDifference, obj.getLocation().getName());
-			}
-			else {
-				notifyUpdateValuesListeners(valueDifference, "Deleção de Item");
+			
+			int sign = valueDifference.signum();
+
+			if (sign != 0) {
+			    if (sign > 0) {
+			        notifyUpdateValuesListeners(valueDifference, obj.getLocation().getName());
+			    } else {
+			        notifyUpdateValuesListeners(valueDifference, "Deleção de Item");
+			    }
 			}
 			parentStage.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Alerts.showAlert("Erro em atualizar pedido", null, e.getMessage(), AlertType.ERROR);
 			e.printStackTrace();
 		}
 	}

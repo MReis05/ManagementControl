@@ -199,6 +199,9 @@ public class AddOrderFormController implements Initializable {
 		catch(ValidationExceptions e) {
 			setErrorMessages(e.getErrors());
 		}
+		catch(Exception e) {
+			Alerts.showAlert("Erro em salvar o pedido", null, e.getMessage(), AlertType.ERROR);
+		}
 	}
 	
 	@FXML

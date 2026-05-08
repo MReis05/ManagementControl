@@ -19,7 +19,7 @@ public class OrderItemHistoryDTO {
 		super();
 		this.name = name;
 		this.totalValue = totalValue;
-		this.averageUnitValue = (averageUnitValue != null) ? BigDecimal.valueOf(averageUnitValue).setScale(2, RoundingMode.HALF_EVEN) : BigDecimal.ZERO;
+		this.averageUnitValue = BigDecimal.valueOf(averageUnitValue).setScale(2, RoundingMode.HALF_EVEN);
 		this.category = category;
 	}
 

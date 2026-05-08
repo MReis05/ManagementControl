@@ -62,6 +62,8 @@ public class ManagementApp extends Application {
             primaryStage.setTitle("Controle de Caixa e Insumos");
             primaryStage.setWidth(800);
             primaryStage.setHeight(600);
+            primaryStage.setMinWidth(700);
+            primaryStage.setMinHeight(600);
             primaryStage.setMaximized(true);
             
             splashStage.close();
